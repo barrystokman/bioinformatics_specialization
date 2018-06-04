@@ -1,7 +1,6 @@
 import click
 
 from bioinformatics_1 import bioinformatics_1 as bioinfo1
-from bioinformatics_1 import bioinfo_stdin_reader as file_reader
 
 DATASET_PATH = '/home/barry/proj/bioinformatics/datasets/'
 
@@ -58,22 +57,6 @@ def pattern_count(context, dataset):
 
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
-
-
-@biocli.command('pc')
-@click.argument('dataset', required=True)
-@click.pass_context
-def pc(context, dataset):
-    """
-    Calls the function pattern_count(text, pattern).
-    """
-    click.clear()
-
-    with open(DATASET_PATH + dataset) as f:
-        read_data = f.read().splitlines()
-    
-    read_file = file_reader.ReadFile(read_data)
-    print(read_file)
 
 
 @biocli.command('frequent-words')
