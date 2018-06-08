@@ -3,7 +3,7 @@ import unittest
 
 sys.path.insert(0, '/home/barry/proj/bioinformatics/bioinformatics_1')
 
-import bioinformatics_1 as bioinfo1
+import functions as bioinfo1
 
 
 class PatternCountTests(unittest.TestCase):
