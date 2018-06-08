@@ -64,7 +64,7 @@ def pattern_count(context, dataset):
 @click.pass_context
 def frequent_words(context, dataset):
     """
-    Calls the function faster_frequent_words(tekst, k).
+    Calls the function frequent_words_by_sorting(tekst, k).
     The input variables 'text' and 'k' are read from the DATASET argument, where DATASET is
     the text file containing the input data
     """
@@ -79,14 +79,14 @@ def frequent_words(context, dataset):
         k = int(read_data[1])
         # TODO: helper function print code challenge result
         click.echo(f"The result of the Coding Challenge is:")
-        click.echo(click.style(f"{' '.join(sorted(bioinfo1.faster_frequent_words(text, k)))}",
+        click.echo(click.style(f"{' '.join(sorted(bioinfo1.frequent_words_by_sorting(text, k)))}",
                                fg="yellow", bold=True))
     else:
         # TODO: helper funtion read non-code challenge data
         text = read_data[1]
         k = int(read_data[2])
         correct_result = read_data[4]
-        result = bioinfo1.faster_frequent_words(text, k)
+        result = bioinfo1.frequent_words_by_sorting(text, k)
 
         # prepare result for output by sorting an joining
 
