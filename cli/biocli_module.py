@@ -1,6 +1,6 @@
 import click
 
-from bioinformatics_1 import bioinformatics_1 as bioinfo1
+from bioinformatics_1 import functions as bioinfo1
 
 DATASET_PATH = '/home/barry/proj/bioinformatics/datasets/'
 
