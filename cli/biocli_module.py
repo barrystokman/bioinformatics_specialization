@@ -12,8 +12,6 @@ from helper.dataset_reader import (PatternCountDataset,
                                    NumberToPatternDataset
                                    )
 
-DATASET_PATH = '/home/barry/proj/bioinformatics/datasets/'
-
 
 @click.group()
 @click.option('--code-challenge', '-c', is_flag=True,
