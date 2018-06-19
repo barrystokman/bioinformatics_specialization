@@ -2,6 +2,15 @@ import click
 
 from bioinformatics_1 import functions as bioinfo1
 from helper.cli_helper import result_color
+from helper.dataset_reader import (PatternCountDataset,
+                                   FrequentWordsDataset,
+                                   ReverseComplementDataset,
+                                   PatternMatchingDataset,
+                                   ClumpFindingDataset,
+                                   ComputingFrequenciesDataset,
+                                   PatternToNumberDataset,
+                                   NumberToPatternDataset
+                                   )
 
 DATASET_PATH = '/home/barry/proj/bioinformatics/datasets/'
 
@@ -32,22 +41,20 @@ def pattern_count(context, dataset):
     """
     click.clear()
 
-    with open(DATASET_PATH + dataset) as f:
-        read_data = f.read().splitlines()
+    data = PatternCountDataset(dataset)
 
     if context.obj['CHALLENGE']:
-        # TODO: helper funtion read code challenge data
-        text = read_data[0]
-        pattern = read_data[1]
-        # TODO: helper function print code challenge result
+        text = data.get_text_challenge()
+        pattern = data.get_pattern_challenge()
+
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{bioinfo1.pattern_count(text, pattern)}",
                                fg="yellow", bold=True))
     else:
-        # TODO: helper funtion read non-code challenge data
-        text = read_data[1]
-        pattern = read_data[2]
-        correct_result = int(read_data[4])
+        text = data.get_text()
+        pattern = data.get_pattern()
+        correct_result = data.get_expected_result()
+
         result = bioinfo1.pattern_count(text, pattern)
 
         text_color = result_color(result, correct_result)
@@ -67,22 +74,20 @@ def frequent_words(context, dataset):
     """
     click.clear()
 
-    with open(DATASET_PATH + dataset) as f:
-        read_data = f.read().splitlines()
+    data = FrequentWordsDataset(dataset)
 
     if context.obj['CHALLENGE']:
-        # TODO: helper funtion read code challenge data
-        text = read_data[0]
-        k = int(read_data[1])
-        # TODO: helper function print code challenge result
+        text = data.get_text_challenge()
+        k = data.get_k_challenge()
+
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{' '.join(sorted(bioinfo1.frequent_words_by_sorting(text, k)))}",
                                fg="yellow", bold=True))
     else:
-        # TODO: helper funtion read non-code challenge data
-        text = read_data[1]
-        k = int(read_data[2])
-        correct_result = read_data[4]
+        text = data.get_text()
+        k = data.get_k()
+        correct_result = data.get_expected_result()
+
         result = bioinfo1.frequent_words_by_sorting(text, k)
 
         # prepare result for output by sorting an joining
@@ -106,20 +111,18 @@ def reverse_complement(context, dataset):
     """
     click.clear()
 
-    with open(DATASET_PATH + dataset) as f:
-        read_data = f.read().splitlines()
+    data = ReverseComplementDataset(dataset)
 
     if context.obj['CHALLENGE']:
-        # TODO: helper funtion read code challenge data
-        pattern = read_data[0]
-        # TODO: helper function print code challenge result
+        pattern = data.get_pattern_challenge()
+
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{bioinfo1.reverse_complement(pattern)}",
                                fg="yellow", bold=True))
     else:
-        # TODO: helper funtion read non-code challenge data
-        pattern = read_data[1]
-        correct_result = read_data[3]
+        pattern = data.get_pattern()
+        correct_result = data.get_expected_result()
+
         result = bioinfo1.reverse_complement(pattern)
 
         text_color = result_color(result, correct_result)
@@ -140,15 +143,13 @@ def pattern_matching(context, dataset):
     """
     click.clear()
 
-    with open(DATASET_PATH + dataset) as f:
-        read_data = f.read().splitlines()
+    data = PatternMatchingDataset(dataset)
 
     if context.obj['CHALLENGE']:
-        # TODO: helper funtion read code challenge data
-        pattern = read_data[0]
-        genome = read_data[1]
+        pattern = data.get_pattern_challenge()
+        genome = data.get_genome_challenge()
         result = bioinfo1.pattern_matching_problem(pattern, genome)
-        # TODO: helper function print code challenge result
+
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{' '.join(map(str, result))}", fg="yellow", bold=True))
     else:
@@ -168,29 +169,27 @@ def clump_finding(context, dataset):
     """
     click.clear()
 
-    with open(DATASET_PATH + dataset) as f:
-        read_data = f.read().splitlines()
+    data = ClumpFindingDataset(dataset)
 
     if context.obj['CHALLENGE']:
-        # TODO: helper funtion read code challenge data
-        genome = read_data[0]
-        k_l_t = [int(i) for i in read_data[1].split(' ')]
-        k = k_l_t[0]
-        l = k_l_t[1]
-        t = k_l_t[2]
-        result = bioinfo1.better_clump_finding(genome, k, l, t)
-        # TODO: helper function print code challenge result
+        genome = data.get_genome_challenge()
+        var_k = data.get_k_challenge()
+        var_l = data.get_l_challenge()
+        var_t = data.get_t_challenge()
+
+        result = bioinfo1.better_clump_finding(genome, var_k, var_l, var_t)
+
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{' '.join(map(str, result))}", fg="yellow", bold=True))
     else:
-        # TODO: helper funtion read non-code challenge data
-        genome = read_data[1]
-        k_l_t = [int(i) for i in read_data[2].split(' ')]
-        k = k_l_t[0]
-        l = k_l_t[1]
-        t = k_l_t[2]
-        correct_result = read_data[4]
-        result = bioinfo1.better_clump_finding(genome, k, l, t)
+        genome = data.get_genome()
+        var_k = data.get_k()
+        var_l = data.get_l()
+        var_t = data.get_t()
+
+        correct_result = data.get_expected_result()
+
+        result = bioinfo1.better_clump_finding(genome, var_k, var_l, var_t)
 
         # prepare result for output by sorting an joining
 
@@ -213,22 +212,20 @@ def computing_frequencies(context, dataset):
     """
     click.clear()
 
-    with open(DATASET_PATH + dataset) as f:
-        read_data = f.read().splitlines()
+    data = ComputingFrequenciesDataset(dataset)
 
     if context.obj['CHALLENGE']:
-        # TODO: helper funtion read code challenge data
-        text = read_data[0]
-        k = int(read_data[1])
-        # TODO: helper function print code challenge result
+        text = data.get_text_challenge()
+        k = data.get_k_challenge()
+
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{' '.join(map(str, bioinfo1.computing_frequencies(text, k)))}",
                                fg="yellow", bold=True))
     else:
-        # TODO: helper funtion read non-code challenge data
-        text = read_data[1]
-        k = int(read_data[2])
-        correct_result = read_data[4]
+        text = data.get_text()
+        k = data.get_k()
+        correct_result = data.get_expected_result()
+
         result = bioinfo1.computing_frequencies(text, k)
 
         # prepare result for output by sorting an joining
@@ -252,20 +249,18 @@ def pattern_to_number(context, dataset):
     """
     click.clear()
 
-    with open(DATASET_PATH + dataset) as f:
-        read_data = f.read().splitlines()
+    data = PatternToNumberDataset(dataset)
 
     if context.obj['CHALLENGE']:
-        # TODO: helper funtion read code challenge data
-        pattern = read_data[0]
-        # TODO: helper function print code challenge result
+        pattern = data.get_pattern_challenge()
+
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{bioinfo1.pattern_to_number(pattern)}",
                                fg="yellow", bold=True))
     else:
-        # TODO: helper funtion read non-code challenge data
-        pattern = read_data[1]
-        correct_result = int(read_data[3])
+        pattern = data.get_pattern()
+        correct_result = data.get_expected_result()
+
         result = bioinfo1.pattern_to_number(pattern)
 
         text_color = result_color(result, correct_result)
@@ -285,22 +280,20 @@ def number_to_pattern(context, dataset):
     """
     click.clear()
 
-    with open(DATASET_PATH + dataset) as f:
-        read_data = f.read().splitlines()
+    data = NumberToPatternDataset(dataset)
 
     if context.obj['CHALLENGE']:
-        # TODO: helper funtion read code challenge data
-        number = int(read_data[0])
-        k = int(read_data[1])
-        # TODO: helper function print code challenge result
+        number = data.get_number_challenge()
+        k = data.get_k_challenge()
+
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{bioinfo1.number_to_pattern(number, k)}",
                                fg="yellow", bold=True))
     else:
-        # TODO: helper funtion read non-code challenge data
-        number = int(read_data[1])
-        k = int(read_data[2])
-        correct_result = read_data[4]
+        number = data.get_number()
+        k = data.get_k()
+        correct_result = data.get_expected_result()
+
         result = bioinfo1.number_to_pattern(number, k)
 
         text_color = result_color(result, correct_result)
