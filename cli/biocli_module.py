@@ -1,6 +1,7 @@
 import click
 
 from bioinformatics_1 import functions as bioinfo1
+from helper.cli_helper import result_color
 
 DATASET_PATH = '/home/barry/proj/bioinformatics/datasets/'
 
@@ -49,11 +50,7 @@ def pattern_count(context, dataset):
         correct_result = int(read_data[4])
         result = bioinfo1.pattern_count(text, pattern)
 
-        # TODO: helper function print function result
-        if result == correct_result:
-            text_color = "green"
-        else:
-            text_color = "red"
+        text_color = result_color(result, correct_result)
 
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
@@ -92,11 +89,7 @@ def frequent_words(context, dataset):
 
         result = ' '.join(sorted(result))
 
-        # TODO: helper function print function result
-        if result == correct_result:
-            text_color = "green"
-        else:
-            text_color = "red"
+        text_color = result_color(result, correct_result)
 
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
@@ -129,11 +122,7 @@ def reverse_complement(context, dataset):
         correct_result = read_data[3]
         result = bioinfo1.reverse_complement(pattern)
 
-        # TODO: helper function print function result
-        if result == correct_result:
-            text_color = "green"
-        else:
-            text_color = "red"
+        text_color = result_color(result, correct_result)
 
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
@@ -207,11 +196,7 @@ def clump_finding(context, dataset):
 
         result = ' '.join(sorted(result))
 
-        # TODO: helper function print function result
-        if result == correct_result:
-            text_color = "green"
-        else:
-            text_color = "red"
+        text_color = result_color(result, correct_result)
 
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
@@ -250,11 +235,7 @@ def computing_frequencies(context, dataset):
 
         result = ' '.join(map(str, result))
 
-        # TODO: helper function print function result
-        if result == correct_result:
-            text_color = "green"
-        else:
-            text_color = "red"
+        text_color = result_color(result, correct_result)
 
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
@@ -287,11 +268,7 @@ def pattern_to_number(context, dataset):
         correct_result = int(read_data[3])
         result = bioinfo1.pattern_to_number(pattern)
 
-        # TODO: helper function print function result
-        if result == correct_result:
-            text_color = "green"
-        else:
-            text_color = "red"
+        text_color = result_color(result, correct_result)
 
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
@@ -326,11 +303,7 @@ def number_to_pattern(context, dataset):
         correct_result = read_data[4]
         result = bioinfo1.number_to_pattern(number, k)
 
-        # TODO: helper function print function result
-        if result == correct_result:
-            text_color = "green"
-        else:
-            text_color = "red"
+        text_color = result_color(result, correct_result)
 
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
