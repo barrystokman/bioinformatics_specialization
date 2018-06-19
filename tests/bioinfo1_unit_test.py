@@ -1,9 +1,6 @@
-import sys
 import unittest
 
-sys.path.insert(0, '/home/barry/proj/bioinformatics/bioinformatics_1')
-
-import functions as bioinfo1
+import bioinformatics_1.functions as bioinfo1
 
 
 class PatternCountTests(unittest.TestCase):
@@ -584,8 +581,8 @@ class ComputingFrequenciesTests(unittest.TestCase):
     def test_computing_frequencies_2(self):
         """
         This dataset checks if you have an off-by-one error at the beginning of Text (i.e. you are
-        not counting the first kmer in Text). There are two instances of AA (TT*AA*A and TTA*AA*), but
-        there is one instance of TTA (*TTA*AA) and one instance of TAA (T*TAA*A)
+        not counting the first kmer in Text). There are two instances of AA (TT*AA*A and TTA*AA*),
+        but there is one instance of TTA (*TTA*AA) and one instance of TAA (T*TAA*A)
         """
         test_text = "TTAAA"
         test_k = 2
@@ -595,8 +592,8 @@ class ComputingFrequenciesTests(unittest.TestCase):
     def test_computing_frequencies_3(self):
         """
         This dataset checks if your code actually increments each count, or if your code instead
-        just sets the count equal to one each time. In other words, this dataset checks if your code is
-        doing something like array[kmer] = 1 instead of array[kmer] += 1
+        just sets the count equal to one each time. In other words, this dataset checks if your code
+        is doing something like array[kmer] = 1 instead of array[kmer] += 1
         """
         test_text = "AAA"
         test_k = 2

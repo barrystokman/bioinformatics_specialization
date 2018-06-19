@@ -13,8 +13,8 @@ reverse_complement(pattern)
 pattern_matching_problem(pattern, genome)
 better_clump_finding(genome, k, l, t)
 computing_frequencies(text, k)
-number_to_pattern(number, k)
 pattern_to_number(pattern)
+number_to_pattern(number, k)
 
 DEPRECATED:
 frequent_words(text, k)
