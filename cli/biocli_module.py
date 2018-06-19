@@ -20,7 +20,7 @@ from helper.dataset_reader import (PatternCountDataset,
 def biocli(context, code_challenge):
     """
     Collection of CLI callable bioinformatics functions to make Code Challenges quick and easy to
-    perform
+    perform.
     """
     if context.obj is None:
         context.obj = {}
@@ -33,9 +33,8 @@ def biocli(context, code_challenge):
 @click.pass_context
 def pattern_count(context, dataset):
     """
-    Calls the function pattern_count(text, pattern).
-    The input variables 'text' and 'pattern' are read from the DATASET argument, where DATASET is
-    the text file containing the input data
+    Runs pattern_count(text, pattern). The input variables 'text' and 'pattern' are read from the
+    DATASET argument, where DATASET is the text file containing the input data.
     """
     click.clear()
 
@@ -66,9 +65,8 @@ def pattern_count(context, dataset):
 @click.pass_context
 def frequent_words(context, dataset):
     """
-    Calls the function frequent_words_by_sorting(tekst, k).
-    The input variables 'text' and 'k' are read from the DATASET argument, where DATASET is
-    the text file containing the input data
+    Runs frequent_words_by_sorting(tekst, k). The input variables 'text' and 'k' are read from the
+    DATASET argument, where DATASET is the text file containing the input data.
     """
     click.clear()
 
@@ -103,9 +101,8 @@ def frequent_words(context, dataset):
 @click.pass_context
 def reverse_complement(context, dataset):
     """
-    Calls the function reverse_complement(pattern).
-    The input variable 'pattern' is read from the DATASET argument, where DATASET is
-    the text file containing the input data
+    Runs reverse_complement(pattern). The input variable 'pattern' is read from the DATASET
+    argument, where DATASET is the text file containing the input data.
     """
     click.clear()
 
@@ -134,10 +131,9 @@ def reverse_complement(context, dataset):
 @click.pass_context
 def pattern_matching(context, dataset):
     """
-    Calls the function pattern_matching_problem(pattern, genome).
-    The input variables 'pattern' and 'genome' are read from the DATASET argument, where DATASET is
-    the text file containing the input data
-    This function is only available in Code Challenge mode
+    Runs pattern_matching_problem(pattern, genome). The input variables 'pattern' and 'genome' are
+    read from the DATASET argument, where DATASET is the text file containing the input data. This
+    function is only available in Code Challenge mode.
     """
     click.clear()
 
@@ -161,9 +157,8 @@ def pattern_matching(context, dataset):
 @click.pass_context
 def clump_finding(context, dataset):
     """
-    Calls the function better_clump_finding(genome, k, l, t).
-    The input variables 'genome', 'k', 'l', and 't' are read from the DATASET argument, where
-    DATASET is the text file containing the input data
+    Runs better_clump_finding(genome, k, l, t). The input variables 'genome', 'k', 'l', and 't' are
+    read from the DATASET argument, where DATASET is the text file containing the input data.
     """
     click.clear()
 
@@ -204,9 +199,8 @@ def clump_finding(context, dataset):
 @click.pass_context
 def computing_frequencies(context, dataset):
     """
-    Calls the function computing_frequencies(tekst, k).
-    The input variables 'text' and 'k' are read from the DATASET argument, where DATASET is
-    the text file containing the input data
+    Runs computing_frequencies(tekst, k). The input variables 'text' and 'k' are read from the
+    DATASET argument, where DATASET is the text file containing the input data.
     """
     click.clear()
 
@@ -241,9 +235,8 @@ def computing_frequencies(context, dataset):
 @click.pass_context
 def pattern_to_number(context, dataset):
     """
-    Calls the function pattern_to_number(pattern).
-    The input variable 'pattern' is read from the DATASET argument, where DATASET is
-    the text file containing the input data
+    Runs pattern_to_number(pattern). The input variable 'pattern' is read from the DATASET
+    argument, where DATASET is the text file containing the input data.
     """
     click.clear()
 
@@ -272,9 +265,8 @@ def pattern_to_number(context, dataset):
 @click.pass_context
 def number_to_pattern(context, dataset):
     """
-    Calls the function number_to_pattern(number, k).
-    The input variables 'number' and 'k' are read from the DATASET argument, where DATASET is
-    the text file containing the input data
+    Runs number_to_pattern(number, k). The input variables 'number' and 'k' are read from the
+    DATASET argument, where DATASET is the text file containing the input data.
     """
     click.clear()
 
