@@ -10,7 +10,8 @@ from helper.dataset_reader import (PatternCountDataset,
                                    ComputingFrequenciesDataset,
                                    PatternToNumberDataset,
                                    NumberToPatternDataset,
-                                   MinimumSkewDataset
+                                   MinimumSkewDataset,
+                                   HammingDistanceDataset
                                    )
 
 
@@ -296,7 +297,7 @@ def number_to_pattern(context, dataset):
 @biocli.command('minimum-skew')
 @click.argument('dataset', required=True)
 @click.pass_context
-def minimun_skew(context, dataset):
+def minimum_skew(context, dataset):
     """
     Runs minimum_skew(genome). The input variable 'genome' is read from the DATASET argument, where
     DATASET is the text file containing the input data.
@@ -320,6 +321,39 @@ def minimun_skew(context, dataset):
         # prepare result for output by sorting an joining
 
         result = ' '.join(map(str, result))
+
+        text_color = result_color(result, correct_result)
+
+        click.echo(click.style(f"The result of this function is:"))
+        click.echo(click.style(f"{result}", fg=text_color, bold=True))
+
+
+@biocli.command('hamming-distance')
+@click.argument('dataset', required=True)
+@click.pass_context
+def hamming_distance(context, dataset):
+    """
+    Runs hamming_distance(string1, string2). The input variables 'string1' and 'string2' are read
+    from the DATASET argument, where DATASET is the text file containing the input data.
+    """
+    click.clear()
+
+    data = HammingDistanceDataset(dataset)
+
+    if context.obj['CHALLENGE']:
+        string1 = data.get_string1_challenge()
+        string2 = data.get_string2_challenge()
+
+        click.echo(f"The result of the Coding Challenge is:")
+        click.echo(click.style(f"{bioinfo1.hamming_distance(string1, string2)}",
+                               fg="yellow", bold=True))
+    else:
+        string1 = data.get_string1()
+        string2 = data.get_string2()
+
+        correct_result = data.get_expected_result()
+
+        result = bioinfo1.hamming_distance(string1, string2)
 
         text_color = result_color(result, correct_result)
 
