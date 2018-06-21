@@ -88,7 +88,8 @@ class DatasetReaderTests(unittest.TestCase):
         test_dataset = dataset_reader.ClumpFindingDataset('../tests/testdata/' +
                                                           'clump_finding.txt')
         self.assertEqual(test_dataset.get_genome(),
-                         'CGGACTCGACAGATGTGAAGAACGACAATGTGAAGACTCGACACGACAGAGTGAAGAGAAGAGGAAACATTGTAA')
+                         'CGGACTCGACAGATGTGAAGAACGACAATGTGAAGACTCGACACGACAGAGTGAAGAGAAGAGGAAACAT' +
+                         'TGTAA')
         self.assertEqual(test_dataset.get_k(), 5)
         self.assertEqual(test_dataset.get_l(), 50)
         self.assertEqual(test_dataset.get_t(), 4)
@@ -100,7 +101,8 @@ class DatasetReaderTests(unittest.TestCase):
         test_dataset = dataset_reader.ClumpFindingDataset('../tests/testdata/' +
                                                           'clump_finding_challenge.txt')
         self.assertEqual(test_dataset.get_genome_challenge(),
-                         'CGGACTCGACAGATGTGAAGAACGACAATGTGAAGACTCGACACGACAGAGTGAAGAGAAGAGGAAACATTGTAA')
+                         'CGGACTCGACAGATGTGAAGAACGACAATGTGAAGACTCGACACGACAGAGTGAAGAGAAGAGGAAACAT' +
+                         'TGTAA')
         self.assertEqual(test_dataset.get_k_challenge(), 5)
         self.assertEqual(test_dataset.get_l_challenge(), 50)
         self.assertEqual(test_dataset.get_t_challenge(), 4)
@@ -170,6 +172,23 @@ class DatasetReaderTests(unittest.TestCase):
                                                          'minimum_skew_challenge.txt')
         self.assertEqual(test_dataset.get_genome_challenge(),
                          'AGACTGCCGAGAGGCCAACACGAGTGCTAGAACGAGGGGCGTAAACGCGGGTCCGA')
+
+    def test_read_hamming_distance(self):
+        """
+        """
+        test_dataset = dataset_reader.HammingDistanceDataset('../tests/testdata/' +
+                                                             'hamming_distance.txt')
+        self.assertEqual(test_dataset.get_string1(), 'GGGCCGTTGGT')
+        self.assertEqual(test_dataset.get_string2(), 'GGACCGTTGAC')
+        self.assertEqual(test_dataset.get_expected_result(), 3)
+
+    def test_read_hamming_distance_challenge(self):
+        """
+        """
+        test_dataset = dataset_reader.HammingDistanceDataset('../tests/testdata/' +
+                                                             'hamming_distance_challenge.txt')
+        self.assertEqual(test_dataset.get_string1_challenge(), 'GGGCCGTTGGT')
+        self.assertEqual(test_dataset.get_string2_challenge(), 'GGACCGTTGAC')
 
 
 if __name__ == "__main__":
