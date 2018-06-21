@@ -184,6 +184,24 @@ class MinimumSkewDataset(ReadDataset):
         return self.lines[0].rstrip()
 
 
+class HammingDistanceDataset(ReadDataset):
+
+    def get_string1(self):
+        return self.lines[1].rstrip()
+
+    def get_string2(self):
+        return self.lines[2].rstrip()
+
+    def get_expected_result(self):
+        return int(self.lines[4])
+
+    def get_string1_challenge(self):
+        return self.lines[0].rstrip()
+
+    def get_string2_challenge(self):
+        return self.lines[1].rstrip()
+
+
 def main():
     pass
 
