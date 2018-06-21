@@ -650,5 +650,81 @@ class MinimumSkewTests(unittest.TestCase):
         self.assertEqual(bioinfo1.minimum_skew(test_genome), test_output)
 
 
+class HammingDistanceTests(unittest.TestCase):
+
+    def setUp(self):
+        pass
+
+    def test_hamming_distance_sample(self):
+        """
+        """
+        test_string1 = 'GGGCCGTTGGT'
+        test_string2 = 'GGACCGTTGAC'
+        test_output = 3
+        self.assertEqual(bioinfo1.hamming_distance(test_string1, test_string2), test_output)
+
+    def test_hamming_distance_1(self):
+        """
+        This dataset checks if your code isn’t keeping count (i.e. returns ‘0’ when the answer is
+        clearly nonzero) or if your code returns a negative value, which is impossible.
+        """
+        test_string1 = 'AAAA'
+        test_string2 = 'TTTT'
+        test_output = 4
+        self.assertEqual(bioinfo1.hamming_distance(test_string1, test_string2), test_output)
+
+    def test_hamming_distance_2(self):
+        """
+        This dataset checks if your code is finding Edit Distance (which would be 2) instead of
+        Hamming Distance.
+        """
+        test_string1 = 'ACGTACGT'
+        test_string2 = 'TACGTACG'
+        test_output = 8
+        self.assertEqual(bioinfo1.hamming_distance(test_string1, test_string2), test_output)
+
+    def test_hamming_distance_3(self):
+        """
+        This dataset checks if your code is returning the number of matches (2) instead of the
+        number of mismatches (6).
+        """
+        test_string1 = 'ACGTACGT'
+        test_string2 = 'CCCCCCCC'
+        test_output = 6
+        self.assertEqual(bioinfo1.hamming_distance(test_string1, test_string2), test_output)
+
+    def test_hamming_distance_4(self):
+        """
+        This dataset checks if your code works on a dataset where the two input strings have no
+        matches.
+        """
+        test_string1 = 'ACGTACGT'
+        test_string2 = 'TGCATGCA'
+        test_output = 8
+        self.assertEqual(bioinfo1.hamming_distance(test_string1, test_string2), test_output)
+
+    def test_hamming_distance_5(self):
+        """
+        This dataset checks if you have an off­by­one error at the beginning (i.e. you are starting
+        at the second character of the strings instead of the first character).
+        """
+        test_string1 = 'GATAGCAGCTTCTGAACTGGTTACCTGCCGTGAGTAAATTAAAATTTTATTGACTTAGGTCACTAAATACT'
+        test_string2 = 'AATAGCAGCTTCTCAACTGGTTACCTCGTATGAGTAAATTAGGTCATTATTGACTCAGGTCACTAACGTCT'
+        test_output = 15
+        self.assertEqual(bioinfo1.hamming_distance(test_string1, test_string2), test_output)
+
+    def test_hamming_distance_6(self):
+        """
+        This dataset checks if you have an off­by­one error at the end (i.e. you are ending at the
+        second­to­last character of the strings instead of the last character).
+        """
+        test_string1 = 'AGAAACAGACCGCTATGTTCAACGATTTGTTTTATCTCGTCACCGGGATATTGCGGCCACTCATCGGTCAG' +\
+                       'TTGATTACGCAGGGCGTAAATCGCCAGAATCAGGCTG'
+        test_string2 = 'AGAAACCCACCGCTAAAAACAACGATTTGCGTAGTCAGGTCACCGGGATATTGCGGCCACTAAGGCCTTGG' +\
+                       'ATGATTACGCAGAACGTATTGACCCAGAATCAGGCTC'
+        test_output = 28
+        self.assertEqual(bioinfo1.hamming_distance(test_string1, test_string2), test_output)
+
+
 if __name__ == "__main__":
         unittest.main()
