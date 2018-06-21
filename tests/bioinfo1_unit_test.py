@@ -601,5 +601,54 @@ class ComputingFrequenciesTests(unittest.TestCase):
         self.assertEqual(bioinfo1.computing_frequencies(test_text, test_k), test_output)
 
 
+class MinimumSkewTests(unittest.TestCase):
+
+    def setUp(self):
+        pass
+
+    def test_minimum_skew_sample(self):
+        """
+        """
+        test_genome = 'TAAAGACTGCCGAGAGGCCAACACGAGTGCTAGAACGAGGGGCGTAAACGCGGGTCCGAT'
+        test_output = [11, 24]
+        self.assertEqual(bioinfo1.minimum_skew(test_genome), test_output)
+
+    def test_minimum_skew_1(self):
+        """
+        This dataset checks if your code’s indexing is off. Specifically, it verifies that your
+        code is not returning an index 1 too high (i.e. 4) or 1 too low (i.e. 2)
+        """
+        test_genome = 'ACCG'
+        test_output = [3]
+        self.assertEqual(bioinfo1.minimum_skew(test_genome), test_output)
+
+    def test_minimum_skew_2(self):
+        """
+        This dataset checks to see if your code is missing the last symbol of Genome.
+        """
+        test_genome = 'ACCC'
+        test_output = [4]
+        self.assertEqual(bioinfo1.minimum_skew(test_genome), test_output)
+
+    def test_minimum_skew_3(self):
+        """
+        This dataset makes sure you’re not accidentally finding the maximum skew instead of the
+        minimum skew.
+        """
+        test_genome = 'CCGGGT'
+        test_output = [2]
+        self.assertEqual(bioinfo1.minimum_skew(test_genome), test_output)
+
+    def test_minimum_skew_4(self):
+        """
+        First, this dataset checks if you are only finding 1 index (and not multiple indices).
+        Then, it checks if you are using a delimiter to separate your indices (ideally a space
+        character)
+        """
+        test_genome = 'CCGGCCGG'
+        test_output = [2, 6]
+        self.assertEqual(bioinfo1.minimum_skew(test_genome), test_output)
+
+
 if __name__ == "__main__":
         unittest.main()

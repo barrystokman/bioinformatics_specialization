@@ -9,7 +9,8 @@ from helper.dataset_reader import (PatternCountDataset,
                                    ClumpFindingDataset,
                                    ComputingFrequenciesDataset,
                                    PatternToNumberDataset,
-                                   NumberToPatternDataset
+                                   NumberToPatternDataset,
+                                   MinimumSkewDataset
                                    )
 
 
@@ -285,6 +286,40 @@ def number_to_pattern(context, dataset):
         correct_result = data.get_expected_result()
 
         result = bioinfo1.number_to_pattern(number, k)
+
+        text_color = result_color(result, correct_result)
+
+        click.echo(click.style(f"The result of this function is:"))
+        click.echo(click.style(f"{result}", fg=text_color, bold=True))
+
+
+@biocli.command('minimum-skew')
+@click.argument('dataset', required=True)
+@click.pass_context
+def minimun_skew(context, dataset):
+    """
+    Runs minimum_skew(genome). The input variable 'genome' is read from the DATASET argument, where
+    DATASET is the text file containing the input data.
+    """
+    click.clear()
+
+    data = MinimumSkewDataset(dataset)
+
+    if context.obj['CHALLENGE']:
+        genome = data.get_genome_challenge()
+
+        click.echo(f"The result of the Coding Challenge is:")
+        click.echo(click.style(f"{' '.join(map(str, bioinfo1.minimum_skew(genome)))}",
+                               fg="yellow", bold=True))
+    else:
+        genome = data.get_genome()
+        correct_result = data.get_expected_result()
+
+        result = bioinfo1.minimum_skew(genome)
+
+        # prepare result for output by sorting an joining
+
+        result = ' '.join(map(str, result))
 
         text_color = result_color(result, correct_result)
 

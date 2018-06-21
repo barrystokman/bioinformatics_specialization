@@ -25,6 +25,9 @@ number_to_pattern_non_recursive(number, k)
 pattern_to_number_non_recursive(pattern)
 
 Week 2:
+
+skew(genome)
+minimum_skew(genome)
 """
 
 
@@ -314,7 +317,50 @@ def pattern_to_number(pattern: str) -> int:
         return 4 * pattern_to_number(prefix) + SYMBOL_TO_NUMBER[symbol]
 
 
+def skew(genome):
+    """
+    We define skew_i(genome) as the difference between the total number of occurrences of G and the
+    total number of occurrences of C in the first i nucleotides of Genome.
+
+    Note that we can compute skew_i+1(genome) from skew_i(genome) according to the nucleotide in
+    position i of genome. If this nucleotide is G, then skew_i+1(genome) = skew_i(genome) + 1; if
+    this nucleotide is C, then skew_i+1(genome)= skew_i(genome) – 1; otherwise, skew_i+1(enome) =
+    skew_i(genome).
+
+    """
+    skew_values = [0]
+
+    for i in range(len(genome)):
+        if genome[i] == 'G':
+            skew_values.append(skew_values[i] + 1)
+        elif genome[i] == 'C':
+            skew_values.append(skew_values[i] - 1)
+        else:
+            skew_values.append(skew_values[i])
+
+    return skew_values
+
+
+def minimum_skew(genome):
+    """
+    Input: a DNA string genome.
+    Output: All integer(s) i minimizing skew_i(genome) among all values of i (from 0 to len(genome))
+    """
+    _skew = skew(genome)
+    minimum_skew = min(_skew)
+
+    min_skew_positions = [i for i in range(len(genome) + 1) if _skew[i] == minimum_skew]
+
+    return min_skew_positions
+
+
 def main():
+    # print(skew('GAGCCACCGCGATA'))
+    # print(skew('CATGGGCATCGGCCATACGCC'))
+    # print(minimum_skew('GAGCCACCGCGATA'))
+    # print(minimum_skew('CATGGGCATCGGCCATACGCC'))
+    # print(skew('TAAAGACTGCCGAGAGGCCAACACGAGTGCTAGAACGAGGGGCGTAAACGCGGGTCCGAT'))
+    # print(minimum_skew('TAAAGACTGCCGAGAGGCCAACACGAGTGCTAGAACGAGGGGCGTAAACGCGGGTCCGAT'))
     pass
 
 

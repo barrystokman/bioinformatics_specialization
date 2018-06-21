@@ -172,6 +172,18 @@ class NumberToPatternDataset(ReadDataset):
         return int(self.lines[1])
 
 
+class MinimumSkewDataset(ReadDataset):
+
+    def get_genome(self):
+        return self.lines[1].rstrip()
+
+    def get_expected_result(self):
+        return self.lines[3].rstrip()
+
+    def get_genome_challenge(self):
+        return self.lines[0].rstrip()
+
+
 def main():
     pass
 

@@ -154,6 +154,23 @@ class DatasetReaderTests(unittest.TestCase):
         self.assertEqual(test_dataset.get_number_challenge(), 8718)
         self.assertEqual(test_dataset.get_k_challenge(), 8)
 
+    def test_read_minimum_skew(self):
+        """
+        """
+        test_dataset = dataset_reader.MinimumSkewDataset('../tests/testdata/' +
+                                                         'minimum_skew.txt')
+        self.assertEqual(test_dataset.get_genome(),
+                         'TAAAGACTGCCGAGAGGCCAACACGAGTGCTAGAACGAGGGGCGTAAACGCGGGTCCGAT')
+        self.assertEqual(test_dataset.get_expected_result(), '11 24')
+
+    def test_read_minimum_skew_challenge(self):
+        """
+        """
+        test_dataset = dataset_reader.MinimumSkewDataset('../tests/testdata/' +
+                                                         'minimum_skew_challenge.txt')
+        self.assertEqual(test_dataset.get_genome_challenge(),
+                         'AGACTGCCGAGAGGCCAACACGAGTGCTAGAACGAGGGGCGTAAACGCGGGTCCGA')
+
 
 if __name__ == "__main__":
     unittest.main()
