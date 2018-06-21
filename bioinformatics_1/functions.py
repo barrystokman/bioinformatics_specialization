@@ -28,6 +28,7 @@ Week 2:
 
 skew(genome)
 minimum_skew(genome)
+hamming_distance(string1, string2)
 """
 
 
@@ -354,13 +355,22 @@ def minimum_skew(genome):
     return min_skew_positions
 
 
+def hamming_distance(string1: str, string2: str) -> int:
+    """
+    Computes the Hamming distance between two strings.
+    Input: two strings of equal length: string1 and string2
+    Output: the Hamming distance between these strings
+    """
+    distance = 0
+
+    for i in range(len(string1)):
+        if string1[i] != string2[i]:
+            distance += 1
+
+    return distance
+
+
 def main():
-    # print(skew('GAGCCACCGCGATA'))
-    # print(skew('CATGGGCATCGGCCATACGCC'))
-    # print(minimum_skew('GAGCCACCGCGATA'))
-    # print(minimum_skew('CATGGGCATCGGCCATACGCC'))
-    # print(skew('TAAAGACTGCCGAGAGGCCAACACGAGTGCTAGAACGAGGGGCGTAAACGCGGGTCCGAT'))
-    # print(minimum_skew('TAAAGACTGCCGAGAGGCCAACACGAGTGCTAGAACGAGGGGCGTAAACGCGGGTCCGAT'))
     pass
 
 
