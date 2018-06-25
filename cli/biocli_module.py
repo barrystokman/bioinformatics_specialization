@@ -67,7 +67,7 @@ def pattern_count(context, dataset):
 @click.pass_context
 def frequent_words(context, dataset):
     """
-    Runs frequent_words_by_sorting(tekst, k). The input variables 'text' and 'k' are read from the
+    Runs frequent_words_by_sorting(text, k). The input variables 'text' and 'k' are read from the
     DATASET argument, where DATASET is the text file containing the input data.
     """
     click.clear()
@@ -201,7 +201,7 @@ def clump_finding(context, dataset):
 @click.pass_context
 def computing_frequencies(context, dataset):
     """
-    Runs computing_frequencies(tekst, k). The input variables 'text' and 'k' are read from the
+    Runs computing_frequencies(text, k). The input variables 'text' and 'k' are read from the
     DATASET argument, where DATASET is the text file containing the input data.
     """
     click.clear()
