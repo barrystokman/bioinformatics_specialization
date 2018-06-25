@@ -11,7 +11,8 @@ from helper.dataset_reader import (PatternCountDataset,
                                    PatternToNumberDataset,
                                    NumberToPatternDataset,
                                    MinimumSkewDataset,
-                                   HammingDistanceDataset
+                                   HammingDistanceDataset,
+                                   ApproxMatchDataset
                                    )
 
 
@@ -354,6 +355,46 @@ def hamming_distance(context, dataset):
         correct_result = data.get_expected_result()
 
         result = bioinfo1.hamming_distance(string1, string2)
+
+        text_color = result_color(result, correct_result)
+
+        click.echo(click.style(f"The result of this function is:"))
+        click.echo(click.style(f"{result}", fg=text_color, bold=True))
+
+
+@biocli.command('approx-matching')
+@click.argument('dataset', required=True)
+@click.pass_context
+def approx_matching(context, dataset):
+    """
+    Runs approx_matching(pattern, text, d). The input variables 'pattern' and 'text' are read from
+    the DATASET argument, where DATASET is the text file containing the input data.
+    """
+    click.clear()
+
+    data = ApproxMatchDataset(dataset)
+
+    if context.obj['CHALLENGE']:
+        pattern = data.get_pattern_challenge()
+        text = data.get_text_challenge()
+        d = data.get_d_challenge()
+
+        result = bioinfo1.approx_pattern_match(pattern, text, d)
+
+        click.echo(f"The result of the Coding Challenge is:")
+        click.echo(click.style(f"{' '.join(map(str, result))}", fg="yellow", bold=True))
+    else:
+        pattern = data.get_pattern()
+        text = data.get_text()
+        d = data.get_d()
+
+        correct_result = data.get_expected_result()
+
+        result = bioinfo1.approx_pattern_match(pattern, text, d)
+
+        # prepare result for output by sorting an joining
+
+        result = ' '.join(map(str, result))
 
         text_color = result_color(result, correct_result)
 
