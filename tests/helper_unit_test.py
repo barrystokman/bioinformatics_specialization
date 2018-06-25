@@ -190,6 +190,27 @@ class DatasetReaderTests(unittest.TestCase):
         self.assertEqual(test_dataset.get_string1_challenge(), 'GGGCCGTTGGT')
         self.assertEqual(test_dataset.get_string2_challenge(), 'GGACCGTTGAC')
 
+    def test_read_approx_matching(self):
+        """
+        """
+        test_dataset = dataset_reader.ApproxMatchDataset('../tests/testdata/' +
+                                                         'approximate_match.txt')
+        self.assertEqual(test_dataset.get_pattern(), 'ATTCTGGA')
+        self.assertEqual(test_dataset.get_text(),
+                         'CGCCCGAATCCAGAACGCATTCCCATATTTCGGGACCACTGGCCTCCACGGTACGGACGTCAATCAAAT')
+        self.assertEqual(test_dataset.get_d(), 3)
+        self.assertEqual(test_dataset.get_expected_result(), '6 7 26 27')
+
+    def test_read_approx_matching_challenge(self):
+        """
+        """
+        test_dataset = dataset_reader.ApproxMatchDataset('../tests/testdata/' +
+                                                         'approximate_match_challenge.txt')
+        self.assertEqual(test_dataset.get_pattern_challenge(), 'ATTCTGGA')
+        self.assertEqual(test_dataset.get_text_challenge(),
+                         'CGCCCGAATCCAGAACGCATTCCCATATTTCGGGACCACTGGCCTCCACGGTACGGACGTCAATCAAAT')
+        self.assertEqual(test_dataset.get_d_challenge(), 3)
+
 
 if __name__ == "__main__":
     unittest.main()
