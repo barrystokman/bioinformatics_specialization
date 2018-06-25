@@ -726,5 +726,98 @@ class HammingDistanceTests(unittest.TestCase):
         self.assertEqual(bioinfo1.hamming_distance(test_string1, test_string2), test_output)
 
 
+class ApproximatePatternMatchTests(unittest.TestCase):
+
+    def setUp(self):
+        pass
+
+    def test_approximate_pattern_match_sample(self):
+        """
+
+        """
+        test_pattern = 'ATTCTGGA'
+        test_text = 'CGCCCGAATCCAGAACGCATTCCCATATTTCGGGACCACTGGCCTCCACGGTACGGACGTCAATCAAAT'
+        test_distance = 3
+        test_output = [6, 7, 26, 27]
+        self.assertEqual(bioinfo1.approx_pattern_match(test_pattern, test_text, test_distance),
+                         test_output)
+
+    def test_approximate_pattern_match_1(self):
+        """
+        This dataset checks if you are only counting instances where the number of mismatches is
+        exactly equal to d (i.e. ignoring instances where mismatch < d).
+        """
+        test_pattern = 'AAA'
+        test_text = 'TTTTTTAAATTTTAAATTTTTT'
+        test_distance = 2
+        test_output = [4, 5, 6, 7, 8, 11, 12, 13, 14, 15]
+        self.assertEqual(bioinfo1.approx_pattern_match(test_pattern, test_text, test_distance),
+                         test_output)
+
+    def test_approximate_pattern_match_2(self):
+        """
+        This dataset checks if your code has an off-by-one error at the beginning of Text (i.e.
+        your code is not checking the the leftmost substring of Text).
+        """
+        test_pattern = 'GAGCGCTGG'
+        test_text = 'GAGCGCTGGGTTAACTCGCTACTTCCCGACGAGCGCTGTGGCGCAAATTGGCGATGAAACTGCAGAGAGAACTG' +\
+                    'GTCATCCAACTGAATTCTCCCCGCTATCGCATTTTGATGCGCGCCGCGTCGATT'
+        test_distance = 2
+        test_output = [0, 30, 66]
+        self.assertEqual(bioinfo1.approx_pattern_match(test_pattern, test_text, test_distance),
+                         test_output)
+
+    def test_approximate_pattern_match_3(self):
+        """
+        This dataset checks if your code has an off-by-one error at the end of Text (i.e. your
+        code is not checking the the rightmost substring of Text).
+        """
+        test_pattern = 'AATCCTTTCA'
+        test_text = 'CCAAATCCCCTCATGGCATGCATTCCCGCAGTATTTAATCCTTTCATTCTGCATATAAGTAGTGAAGGTATAGA' +\
+                    'AACCCGTTCAAGCCCGCAGCGGTAAAACCGAGAACCATGATGAATGCACGGCGATTGCGCCATAATCCAAACA'
+        test_distance = 3
+        test_output = [3, 36, 74, 137]
+        self.assertEqual(bioinfo1.approx_pattern_match(test_pattern, test_text, test_distance),
+                         test_output)
+
+    def test_approximate_pattern_match_4(self):
+        """
+        This  dataset  checks  if  your  code  is  correctly  accounting  for  overlapping
+        instances  of Pattern in Text.
+        """
+        test_pattern = 'CCGTCATCC'
+        test_text = 'CCGTCATCCGTCATCCTCGCCACGTTGGCATGCATTCCGTCATCCCGTCAGGCATACTTCTGCATATAAGTACA' +\
+                    'AACATCCGTCATGTCAAAGGGAGCCCGCAGCGGTAAAACCGAGAACCATGATGAATGCACGGCGATTGC'
+        test_distance = 3
+        test_output = [0, 7, 36, 44, 48, 72, 79, 112]
+        self.assertEqual(bioinfo1.approx_pattern_match(test_pattern, test_text, test_distance),
+                         test_output)
+
+    def test_approximate_pattern_match_5(self):
+        """
+        This  dataset  checks  if  you  are  only  counting  instances  of Pattern with  less
+        than d mismatches (as opposed to instances of Pattern with less than or equal to d
+        mismatches).
+        """
+        test_pattern = 'TTT'
+        test_text = 'AAAAAA'
+        test_distance = 3
+        test_output = [0, 1, 2, 3]
+        self.assertEqual(bioinfo1.approx_pattern_match(test_pattern, test_text, test_distance),
+                         test_output)
+
+    def test_approximate_pattern_match_6(self):
+        """
+        This dataset checks if your code works with input where d = 0 (i.e. only perfect matches
+        are allowed).
+        """
+        test_pattern = 'CCA'
+        test_text = 'CCACCT'
+        test_distance = 0
+        test_output = [0]
+        self.assertEqual(bioinfo1.approx_pattern_match(test_pattern, test_text, test_distance),
+                         test_output)
+
+
 if __name__ == "__main__":
         unittest.main()

@@ -29,6 +29,7 @@ Week 2:
 skew(genome)
 minimum_skew(genome)
 hamming_distance(string1, string2)
+approx_pattern_match(pattern, text, d)
 """
 
 
@@ -368,6 +369,23 @@ def hamming_distance(string1: str, string2: str) -> int:
             distance += 1
 
     return distance
+
+
+def approx_pattern_match(pattern: str, text: str, d: int) -> list:
+    """
+    Find all approximate occurences of a pattern in a string
+    Input: string pattern and text, integer d
+    Output: All starting positions where pattern appears as a substring of text with at most d
+    mismatches.
+    """
+    start_index_list = []
+
+    for i in range(len(text) - len(pattern) + 1):
+        if hamming_distance(pattern, text[i:i+len(pattern)]) <= d:
+        # if pattern == genome[i:i+len(pattern)]:
+            start_index_list.append(i)
+
+    return start_index_list
 
 
 def main():
