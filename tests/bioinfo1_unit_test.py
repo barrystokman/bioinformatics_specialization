@@ -819,5 +819,46 @@ class ApproximatePatternMatchTests(unittest.TestCase):
                          test_output)
 
 
+class ApproximatePatternCountTests(unittest.TestCase):
+
+    def setUp(self):
+        pass
+
+    def test_approximate_pattern_count_sample(self):
+        """
+
+        """
+        test_pattern = 'GAGG'
+        test_text = 'TTTAGAGCCTTCAGAGG'
+        test_distance = 2
+        test_output = 4
+        self.assertEqual(bioinfo1.approx_pattern_count(test_pattern, test_text, test_distance),
+                         test_output)
+
+    def test_approximate_pattern_count_1(self):
+        """
+
+        """
+        test_pattern = 'AA'
+        test_text = 'AAA'
+        test_distance = 0
+        test_output = 2
+        self.assertEqual(bioinfo1.approx_pattern_count(test_pattern, test_text, test_distance),
+                         test_output)
+
+    def test_approximate_pattern_count_2(self):
+        """
+        This dataset checks if your code is allowing occurrences with less d than mismatches (which
+        it should). It is a common mistake to only allow occurrences with exactly d mismatches,
+        where as we want all occurrences with less than or equal to d mismatches.
+        """
+        test_pattern = 'ATA'
+        test_text = 'ATA'
+        test_distance = 1
+        test_output = 1
+        self.assertEqual(bioinfo1.approx_pattern_count(test_pattern, test_text, test_distance),
+                         test_output)
+
+
 if __name__ == "__main__":
         unittest.main()

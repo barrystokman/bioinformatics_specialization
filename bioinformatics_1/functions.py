@@ -30,6 +30,10 @@ skew(genome)
 minimum_skew(genome)
 hamming_distance(string1, string2)
 approx_pattern_match(pattern, text, d)
+approx_pattern_count(pattern, text, d)
+
+DEPRECATED:
+count_d(pattern, text, d)
 """
 
 
@@ -382,10 +386,30 @@ def approx_pattern_match(pattern: str, text: str, d: int) -> list:
 
     for i in range(len(text) - len(pattern) + 1):
         if hamming_distance(pattern, text[i:i+len(pattern)]) <= d:
-        # if pattern == genome[i:i+len(pattern)]:
             start_index_list.append(i)
 
     return start_index_list
+
+
+def count_d(pattern: str, text: str, d: int) -> int:
+    """
+    Counts the total number of occurrences of Pattern in Text with at most d mismatches
+    """
+    return len(approx_pattern_match(pattern, text, d))
+
+
+def approx_pattern_count(pattern: str, text: str, d: int) -> int:
+    """
+    Counts the total number of occurrences of Pattern in Text with at most d mismatches
+    """
+    count = 0
+
+    for i in range(len(text) - len(pattern) + 1):
+        sub_text = text[i: i + len(pattern) + 1]
+        if hamming_distance(pattern, sub_text) <= d:
+            count += 1
+
+    return count
 
 
 def main():

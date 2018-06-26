@@ -190,7 +190,7 @@ class DatasetReaderTests(unittest.TestCase):
         self.assertEqual(test_dataset.get_string1_challenge(), 'GGGCCGTTGGT')
         self.assertEqual(test_dataset.get_string2_challenge(), 'GGACCGTTGAC')
 
-    def test_read_approx_matching(self):
+    def test_read_approx_pattern_matching(self):
         """
         """
         test_dataset = dataset_reader.ApproxMatchDataset('../tests/testdata/' +
@@ -201,7 +201,7 @@ class DatasetReaderTests(unittest.TestCase):
         self.assertEqual(test_dataset.get_d(), 3)
         self.assertEqual(test_dataset.get_expected_result(), '6 7 26 27')
 
-    def test_read_approx_matching_challenge(self):
+    def test_read_approx_pattern_matching_challenge(self):
         """
         """
         test_dataset = dataset_reader.ApproxMatchDataset('../tests/testdata/' +
@@ -210,6 +210,26 @@ class DatasetReaderTests(unittest.TestCase):
         self.assertEqual(test_dataset.get_text_challenge(),
                          'CGCCCGAATCCAGAACGCATTCCCATATTTCGGGACCACTGGCCTCCACGGTACGGACGTCAATCAAAT')
         self.assertEqual(test_dataset.get_d_challenge(), 3)
+
+    def test_read_approx_pattern_count(self):
+        """
+        """
+        test_dataset = dataset_reader.ApproxCountDataset('../tests/testdata/' +
+                                                         'approximate_pattern_count.txt')
+
+        self.assertEqual(test_dataset.get_pattern(), 'GAGG')
+        self.assertEqual(test_dataset.get_text(), 'TTTAGAGCCTTCAGAGG')
+        self.assertEqual(test_dataset.get_d(), 2)
+        self.assertEqual(test_dataset.get_expected_result(), 4)
+
+    def test_read_approx_pattern_count_challenge(self):
+        """
+        """
+        test_dataset = dataset_reader.ApproxCountDataset('../tests/testdata/' +
+                                                         'approximate_pattern_count_challenge.txt')
+        self.assertEqual(test_dataset.get_pattern_challenge(), 'GAGG')
+        self.assertEqual(test_dataset.get_text_challenge(), 'TTTAGAGCCTTCAGAGG')
+        self.assertEqual(test_dataset.get_d_challenge(), 2)
 
 
 if __name__ == "__main__":

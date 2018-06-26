@@ -12,7 +12,8 @@ from helper.dataset_reader import (PatternCountDataset,
                                    NumberToPatternDataset,
                                    MinimumSkewDataset,
                                    HammingDistanceDataset,
-                                   ApproxMatchDataset
+                                   ApproxMatchDataset,
+                                   ApproxCountDataset
                                    )
 
 
@@ -400,6 +401,42 @@ def approx_matching(context, dataset):
 
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
+
+
+@biocli.command('approx-count')
+@click.argument('dataset', required=True)
+@click.pass_context
+def approx_count(context, dataset):
+    """
+    Runs approx_pattern_count(pattern, text, d). The input variables 'pattern' and 'text' are read
+    from the DATASET argument, where DATASET is the text file containing the input data.
+    """
+    click.clear()
+
+    data = ApproxCountDataset(dataset)
+
+    if context.obj['CHALLENGE']:
+        pattern = data.get_pattern_challenge()
+        text = data.get_text_challenge()
+        d = data.get_d_challenge()
+
+        click.echo(f"The result of the Coding Challenge is:")
+        click.echo(click.style(f"{bioinfo1.approx_pattern_count(pattern, text, d)}",
+                               fg="yellow", bold=True))
+    else:
+        pattern = data.get_pattern()
+        text = data.get_text()
+        d = data.get_d()
+
+        correct_result = data.get_expected_result()
+
+        result = bioinfo1.approx_pattern_count(pattern, text, d)
+
+        text_color = result_color(result, correct_result)
+
+        click.echo(click.style(f"The result of this function is:"))
+        click.echo(click.style(f"{bioinfo1.approx_pattern_count(pattern, text, d)}",
+                               fg=text_color, bold=True))
 
 
 if __name__ == '__main__':

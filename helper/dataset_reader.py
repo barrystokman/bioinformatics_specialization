@@ -226,6 +226,30 @@ class ApproxMatchDataset(ReadDataset):
         return int(self.lines[2])
 
 
+class ApproxCountDataset(ReadDataset):
+
+    def get_pattern(self):
+        return self.lines[1].rstrip()
+
+    def get_text(self):
+        return self.lines[2].rstrip()
+
+    def get_d(self):
+        return int(self.lines[3])
+
+    def get_expected_result(self):
+        return int(self.lines[5])
+
+    def get_pattern_challenge(self):
+        return self.lines[0].rstrip()
+
+    def get_text_challenge(self):
+        return self.lines[1].rstrip()
+
+    def get_d_challenge(self):
+        return int(self.lines[2])
+
+
 def main():
     pass
 
