@@ -13,7 +13,8 @@ from helper.dataset_reader import (PatternCountDataset,
                                    MinimumSkewDataset,
                                    HammingDistanceDataset,
                                    ApproxMatchDataset,
-                                   ApproxCountDataset
+                                   ApproxCountDataset,
+                                   NeighborsDataset
                                    )
 
 
@@ -90,7 +91,7 @@ def frequent_words(context, dataset):
 
         result = bioinfo1.frequent_words_by_sorting(text, k)
 
-        # prepare result for output by sorting an joining
+        # prepare result for output by sorting and joining
 
         result = ' '.join(sorted(result))
 
@@ -188,7 +189,7 @@ def clump_finding(context, dataset):
 
         result = bioinfo1.better_clump_finding(genome, var_k, var_l, var_t)
 
-        # prepare result for output by sorting an joining
+        # prepare result for output by sorting and joining
 
         result = ' '.join(sorted(result))
 
@@ -224,7 +225,7 @@ def computing_frequencies(context, dataset):
 
         result = bioinfo1.computing_frequencies(text, k)
 
-        # prepare result for output by sorting an joining
+        # prepare result for output by sorting and joining
 
         result = ' '.join(map(str, result))
 
@@ -320,7 +321,7 @@ def minimum_skew(context, dataset):
 
         result = bioinfo1.minimum_skew(genome)
 
-        # prepare result for output by sorting an joining
+        # prepare result for output by sorting and joining
 
         result = ' '.join(map(str, result))
 
@@ -393,9 +394,9 @@ def approx_matching(context, dataset):
 
         result = bioinfo1.approx_pattern_match(pattern, text, d)
 
-        # prepare result for output by sorting an joining
+        # prepare result for output by sorting and joining
 
-        result = ' '.join(map(str, result))
+        result = ' '.join(map(str, (result)))
 
         text_color = result_color(result, correct_result)
 
@@ -408,8 +409,8 @@ def approx_matching(context, dataset):
 @click.pass_context
 def approx_count(context, dataset):
     """
-    Runs approx_pattern_count(pattern, text, d). The input variables 'pattern' and 'text' are read
-    from the DATASET argument, where DATASET is the text file containing the input data.
+    Runs approx_pattern_count(pattern, text, d). The input variables 'pattern', 'text' and 'd' are
+    read from the DATASET argument, where DATASET is the text file containing the input data.
     """
     click.clear()
 
@@ -435,8 +436,50 @@ def approx_count(context, dataset):
         text_color = result_color(result, correct_result)
 
         click.echo(click.style(f"The result of this function is:"))
-        click.echo(click.style(f"{bioinfo1.approx_pattern_count(pattern, text, d)}",
-                               fg=text_color, bold=True))
+        click.echo(click.style(f"{result}", fg=text_color, bold=True))
+
+
+@biocli.command('neighbors')
+@click.argument('dataset', required=True)
+@click.pass_context
+def neighbors(context, dataset):
+    """
+    Runs neighbors(pattern, d). The input variables 'pattern' and 'd' are read from the DATASET
+    argument, where DATASET is the text file containing the input data.
+    """
+    click.clear()
+
+    data = NeighborsDataset(dataset)
+
+    if context.obj['CHALLENGE']:
+        pattern = data.get_pattern_challenge()
+        d = data.get_d_challenge()
+
+        result = bioinfo1.neighbors(pattern, d)
+
+        # backlashes in f-string expressions are not allowed. Assigning '\n' to a variable can
+        # circumvent this:
+        nl = '\n'
+
+        click.echo(f"The result of the Coding Challenge is:")
+        click.echo(click.style(f"{nl}{nl.join(sorted(result))}", fg="yellow", bold=True))
+    else:
+        pattern = data.get_pattern()
+        d = data.get_d()
+
+        correct_result = data.get_expected_result()
+
+        result = bioinfo1.neighbors(pattern, d)
+
+        # prepare result for output by sorting and joining
+
+        correct_result = ' '.join(sorted(correct_result))
+        result = ' '.join(sorted(result))
+
+        text_color = result_color(result, correct_result)
+
+        click.echo(click.style(f"The result of this function is:"))
+        click.echo(click.style(f"{result}", fg=text_color, bold=True))
 
 
 if __name__ == '__main__':

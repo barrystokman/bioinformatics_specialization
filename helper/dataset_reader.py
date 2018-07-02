@@ -250,6 +250,27 @@ class ApproxCountDataset(ReadDataset):
         return int(self.lines[2])
 
 
+class NeighborsDataset(ReadDataset):
+
+    def get_pattern(self):
+        return self.lines[1].rstrip()
+
+    def get_d(self):
+        return int(self.lines[2])
+
+    def get_expected_result(self):
+        expected_result = []
+        for result in self.lines[4:len(self.lines)]:
+            expected_result.append(result.rstrip())
+        return sorted(expected_result)
+
+    def get_pattern_challenge(self):
+        return self.lines[0].rstrip()
+
+    def get_d_challenge(self):
+        return int(self.lines[1])
+
+
 def main():
     pass
 

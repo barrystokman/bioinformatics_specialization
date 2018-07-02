@@ -31,11 +31,17 @@ minimum_skew(genome)
 hamming_distance(string1, string2)
 approx_pattern_match(pattern, text, d)
 approx_pattern_count(pattern, text, d)
+neighbors(pattern, d)
+computing_frequencies_with_mismatches(text, k, d)
+frequent_words_with_mismatches(text, k, d)
+immediate_neighbors(pattern)
 
 DEPRECATED:
 count_d(pattern, text, d)
 """
 
+
+NUCLEOTIDES = ['A', 'C', 'G', 'T']
 
 BASE_COMPLEMENT = {'A': 'T',
                    'C': 'G',
@@ -410,6 +416,81 @@ def approx_pattern_count(pattern: str, text: str, d: int) -> int:
             count += 1
 
     return count
+
+
+def neighbors(pattern: str, d: int) -> list:
+    """
+    """
+    if d == 0:
+        return pattern
+    if len(pattern) == 1:
+        return ['A', 'C', 'G', 'T']
+
+    neighborhood = []
+
+    suffix_pattern = pattern[1:]
+    first_symbol = pattern[0]
+
+    suffix_neighbors = neighbors(suffix_pattern, d)
+
+    for string in suffix_neighbors:
+        if hamming_distance(suffix_pattern, string) < d:
+            for nucleotide in NUCLEOTIDES:
+                neighborhood.append(nucleotide + string)
+        else:
+            neighborhood.append(first_symbol + string)
+
+    return neighborhood
+
+
+def computing_frequencies_with_mismatches(text: str, k: int, d: int) -> list:
+    """
+    generates a frequency array for all k-mers in a string, with at most d mismatches
+    input: text: represents a string of nucleotides, length of k-mer k, Hamming distance d
+    output: a list representing a frequency array
+    """
+    frequency = [0 for i in range(NUMBER_OF_SYMBOLS**k)]
+
+    for i in range(len(text) - k + 1):
+        pattern = text[i:i+k]
+        neighborhood = neighbors(pattern, d)
+        for approximate_pattern in neighborhood:
+            j = pattern_to_number(approximate_pattern)
+            frequency[j] += 1
+
+    return frequency
+
+
+def frequent_words_with_mismatches(text: str, k: int, d: int) -> list:
+    """
+    Works as frequent_words, but uses computing_frequencies to improve running time
+    """
+    frequent_patterns = []
+    frequency_array = computing_frequencies_with_mismatches(text, k, d)
+    max_count = max(frequency_array)
+
+    for i in range(NUMBER_OF_SYMBOLS**k):
+        if frequency_array[i] == max_count:
+            frequent_patterns.append(number_to_pattern(i, k))
+
+    return frequent_patterns
+
+
+def immediate_neighbors(pattern: str) -> list:
+    """
+    generates a list of strings consisting of pattern and all strings 1 Hamming distance away from
+    pattern.
+    """
+    neighborhood = [pattern]
+
+    for i in range(len(pattern)):
+        symbol = pattern[i]
+        for nucleotide in NUCLEOTIDES:
+            if nucleotide != symbol:
+                neighbor = pattern[:i] + nucleotide + pattern[i + 1:]
+                neighborhood.append(neighbor)
+
+    return neighborhood
 
 
 def main():
