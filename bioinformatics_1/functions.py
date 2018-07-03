@@ -422,7 +422,7 @@ def neighbors(pattern: str, d: int) -> list:
     """
     """
     if d == 0:
-        return pattern
+        return [pattern]
     if len(pattern) == 1:
         return ['A', 'C', 'G', 'T']
 
@@ -494,6 +494,12 @@ def immediate_neighbors(pattern: str) -> list:
 
 
 def main():
+    failed_test = frequent_words_with_mismatches('AAT', 3, 0)
+    failed_neighbors = neighbors('AAT', 0)
+    failed_frequencies = computing_frequencies_with_mismatches('AAT', 3, 0)
+    print(failed_neighbors, type(failed_neighbors))
+    print(failed_frequencies)
+    print(failed_test)
     pass
 
 

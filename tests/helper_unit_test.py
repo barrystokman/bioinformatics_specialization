@@ -237,7 +237,7 @@ class DatasetReaderTests(unittest.TestCase):
         test_dataset = dataset_reader.NeighborsDataset('../tests/testdata/' +
                                                        'neighbors.txt')
         self.assertEqual(test_dataset.get_pattern(), 'GGCCCAGAG')
-        self.assertEqual(test_dataset.get_distance(), 3)
+        self.assertEqual(test_dataset.get_d(), 3)
         self.assertEqual(test_dataset.get_expected_result(), sorted(['GGCACAGAT',
                                                                      'GTCCTACAG',
                                                                      'GTATCAGAG',
@@ -2866,7 +2866,43 @@ class DatasetReaderTests(unittest.TestCase):
         test_dataset = dataset_reader.NeighborsDataset('../tests/testdata/' +
                                                        'neighbors_challenge.txt')
         self.assertEqual(test_dataset.get_pattern_challenge(), 'CGTGACACCGAC')
-        self.assertEqual(test_dataset.get_distance_challenge(), 3)
+        self.assertEqual(test_dataset.get_d_challenge(), 3)
+
+    def test_read_frequent_words_mismatches(self):
+        """
+        """
+        test_dataset = dataset_reader.FrequentWordsMismatchesDataset('../tests/testdata/' +
+                                                                     'frequent_words_mismatch.txt')
+        self.assertEqual(test_dataset.get_text(), 'CACAGTAGGCGCCGGCACACACAGCCCCGGGCCCCGGGCCGCCCC' +
+                                                  'GGGCCGGCGGCCGCCGGCGCCGGCACACCGGCACAGCCGTACCGG' +
+                                                  'CACAGTAGTACCGGCCGGCCGGCACACCGGCACACCGGGTACACA' +
+                                                  'CCGGGGCGCACACACAGGCGGGCGCCGGGCCCCGGGCCGTACCGG' +
+                                                  'GCCGCCGGCGGCCCACAGGCGCCGGCACAGTACCGGCACACACAG' +
+                                                  'TAGCCCACACACAGGCGGGCGGTAGCCGGCGCACACACACACAGT' +
+                                                  'AGGCGCACAGCCGCCCACACACACCGGCCGGCCGGCACAGGCGGG' +
+                                                  'CGGGCGCACACACACCGGCACAGTAGTAGGCGGCCGGCGCACAGCC')
+        self.assertEqual(test_dataset.get_k(), 10)
+        self.assertEqual(test_dataset.get_d(), 2)
+        self.assertEqual(test_dataset.get_expected_result(), ['GCACACAGAC', 'GCGCACACAC'])
+
+    def test_read_frequent_words_mismatches_challenge(self):
+        """
+        """
+        test_dataset = dataset_reader.FrequentWordsMismatchesDataset('../tests/testdata/' +
+                                                                     'frequent_words_mismatch' +
+                                                                     '_challenge.txt')
+        self.assertEqual(test_dataset.get_text_challenge(), 'AATGAATGAATGATGAAGTGTAATGAAGTGTTGTA' +
+                                                            'ATGAGAAATGAAGAAGAAGTGTATGTGTATGAGAA' +
+                                                            'ATGAAGTGTATGAGAAATGAATGAGAATGTGTAAG' +
+                                                            'ATGAAGTGTAATGTGTAATGAATGAAGAAGATGAA' +
+                                                            'TGTGTAATGAGATGTAGAAGAAGAAGAAGAAGAAT' +
+                                                            'GAGAAGAATGAATGAAGAAGAATGAATGAATGTGT' +
+                                                            'AAGTGTAGAAATGAGAAATGTGTAAGTGTAAGAAT' +
+                                                            'GAAGTGTAATGATGTGTAATGAAGTGTATGAGAAA' +
+                                                            'GATGAATGTGTAAGAGATGTAATGAGAAATGTGTA' +
+                                                            'AGAGAAGAAGAAGA')
+        self.assertEqual(test_dataset.get_k_challenge(), 5)
+        self.assertEqual(test_dataset.get_d_challenge(), 3)
 
 
 if __name__ == "__main__":

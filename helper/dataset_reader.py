@@ -93,17 +93,17 @@ class ClumpFindingDataset(ReadDataset):
     def get_genome(self):
         return self.lines[1].rstrip()
 
-    def get_variables(self):
+    def _get_variables(self):
         return [int(var) for var in self.lines[2].split(' ')]
 
     def get_k(self):
-        return self.get_variables()[0]
+        return self._get_variables()[0]
 
     def get_l(self):
-        return self.get_variables()[1]
+        return self._get_variables()[1]
 
     def get_t(self):
-        return self.get_variables()[2]
+        return self._get_variables()[2]
 
     def get_expected_result(self):
         return self.lines[4].rstrip()
@@ -111,17 +111,17 @@ class ClumpFindingDataset(ReadDataset):
     def get_genome_challenge(self):
         return self.lines[0].rstrip()
 
-    def get_variables_challenge(self):
+    def _get_variables_challenge(self):
         return [int(var) for var in self.lines[1].split(' ')]
 
     def get_k_challenge(self):
-        return self.get_variables_challenge()[0]
+        return self._get_variables_challenge()[0]
 
     def get_l_challenge(self):
-        return self.get_variables_challenge()[1]
+        return self._get_variables_challenge()[1]
 
     def get_t_challenge(self):
-        return self.get_variables_challenge()[2]
+        return self._get_variables_challenge()[2]
 
 
 class ComputingFrequenciesDataset(ReadDataset):
@@ -269,6 +269,36 @@ class NeighborsDataset(ReadDataset):
 
     def get_d_challenge(self):
         return int(self.lines[1])
+
+
+class FrequentWordsMismatchesDataset(ReadDataset):
+
+    def get_text(self):
+        return self.lines[1].rstrip()
+
+    def _get_variables(self):
+        return [int(var) for var in self.lines[2].split(' ')]
+
+    def get_k(self):
+        return self._get_variables()[0]
+
+    def get_d(self):
+        return self._get_variables()[1]
+
+    def get_expected_result(self):
+        return sorted([result.rstrip() for result in self.lines[4].split(' ')])
+
+    def get_text_challenge(self):
+        return self.lines[0].rstrip()
+
+    def _get_variables_challenge(self):
+        return [int(var) for var in self.lines[1].split(' ')]
+
+    def get_k_challenge(self):
+        return self._get_variables_challenge()[0]
+
+    def get_d_challenge(self):
+        return self._get_variables_challenge()[1]
 
 
 def main():
