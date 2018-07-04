@@ -3596,5 +3596,97 @@ class FrequentWordsWithMismatchesTests(unittest.TestCase):
                          test_output)
 
 
+class FrequentWordsWithMismatchesAndReverseComplementTests(unittest.TestCase):
+
+    def setUp(self):
+        pass
+
+    def test_frequent_words_mismatches_and_rc_sample(self):
+        """
+        """
+        test_text = 'ACGTTGCATGTCGCATGATGCATGAGAGCT'
+        test_k = 4
+        test_d = 1
+        test_output = ['ACAT', 'ATGT']
+        self.assertEqual(sorted(bioinfo1.frequent_words_with_mismatches_and_reverse_complement(
+                                test_text, test_k, test_d)), test_output)
+
+    def test_frequent_words_mismatches_and_rc_1(self):
+        """
+        This dataset checks that your code includes k-mers that do not actually appear in Text.
+        Notice here that, although AT nor TA actually appear in Text, they are valid because they
+        appear in Text with up to 1 mismatch (i.e. 0 or 1 mismatch).
+        """
+        test_text = 'AAAAAAAAAA'
+        test_k = 2
+        test_d = 1
+        test_output = ['AT', 'TA']
+        self.assertEqual(sorted(bioinfo1.frequent_words_with_mismatches_and_reverse_complement(
+                                test_text, test_k, test_d)), test_output)
+
+    def test_frequent_words_mismatches_and_rc_2(self):
+        """
+        This dataset makes sure that your code is not accidentally swapping k and d.
+        """
+        test_text = 'AGTCAGTC'
+        test_k = 4
+        test_d = 2
+        test_output = ['AATT', 'GGCC']
+        self.assertEqual(sorted(bioinfo1.frequent_words_with_mismatches_and_reverse_complement(
+                                test_text, test_k, test_d)), test_output)
+
+    def test_frequent_words_mismatches_and_rc_3(self):
+        """
+        This dataset makes sure you are finding k-mers in both Text and the Reverse Complement of
+        Text.
+        """
+        test_text = 'AATTAATTGGTAGGTAGGTA'
+        test_k = 4
+        test_d = 0
+        test_output = ['AATT']
+        self.assertEqual(sorted(bioinfo1.frequent_words_with_mismatches_and_reverse_complement(
+                                test_text, test_k, test_d)), test_output)
+
+    def test_frequent_words_mismatches_and_rc_4(self):
+        """
+        This dataset first checks that k-mers with exactly d mismatches are being found. Then, it
+        checks that k-mers with less than d mismatches are being allowed (i.e. you are not only
+        allowing k-mers with exactly  d mismatches). Next, it checks that you are not returning too
+        few k-mers. Last, it checks that you are not returning too many  k-mers.
+        """
+        test_text = 'ATA'
+        test_k = 3
+        test_d = 1
+        test_output = ['AAA', 'AAT', 'ACA', 'AGA', 'ATA', 'ATC', 'ATG', 'ATT', 'CAT', 'CTA', 'GAT',
+                       'GTA', 'TAA', 'TAC', 'TAG', 'TAT', 'TCT', 'TGT', 'TTA', 'TTT']
+        self.assertEqual(sorted(bioinfo1.frequent_words_with_mismatches_and_reverse_complement(
+                                test_text, test_k, test_d)), test_output)
+
+    def test_frequent_words_mismatches_and_rc_5(self):
+        """
+        This dataset checks that your code is looking at BOTH Text and its Reverse Complement (i.e.
+        not just looking at Text, and not just looking at the Reverse Complement of Text,    but
+        looking at both).
+        """
+        test_text = 'AAT'
+        test_k = 3
+        test_d = 0
+        test_output = ['AAT', 'ATT']
+        self.assertEqual(sorted(bioinfo1.frequent_words_with_mismatches_and_reverse_complement(
+                                test_text, test_k, test_d)), test_output)
+
+    def test_frequent_words_mismatches_and_rc_6(self):
+        """
+        This dataset checks that your code correctly delimiting your output (i.e. using spaces) and
+        verifies that your k-mers are actually of length k.
+        """
+        test_text = 'TAGCG'
+        test_k = 2
+        test_d = 1
+        test_output = ['CA', 'CC', 'CG', 'TG']
+        self.assertEqual(sorted(bioinfo1.frequent_words_with_mismatches_and_reverse_complement(
+                                test_text, test_k, test_d)), test_output)
+
+
 if __name__ == "__main__":
         unittest.main()
