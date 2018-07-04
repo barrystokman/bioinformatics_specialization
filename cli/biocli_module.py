@@ -483,7 +483,7 @@ def neighbors(context, dataset):
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
 
 
-@biocli.command('frequent_words_mismatches')
+@biocli.command('frequent-words-mismatches')
 @click.argument('dataset', required=True)
 @click.pass_context
 def frequent_words_mismatches(context, dataset):
@@ -512,6 +512,48 @@ def frequent_words_mismatches(context, dataset):
         correct_result = data.get_expected_result()
 
         result = bioinfo1.frequent_words_with_mismatches(text, k, d)
+
+        # prepare result for output by sorting and joining
+
+        correct_result = ' '.join(sorted(correct_result))
+        result = ' '.join(sorted(result))
+
+        text_color = result_color(result, correct_result)
+
+        click.echo(click.style(f"The result of this function is:"))
+        click.echo(click.style(f"{result}", fg=text_color, bold=True))
+
+
+@biocli.command('frequent-words-mismatches-and-reverse-complement')
+@click.argument('dataset', required=True)
+@click.pass_context
+def frequent_words_mismatches_and_reverse_complement(context, dataset):
+    """
+    Runs frequent_words_with_mismatches_and_reverse_complement(pattern, k, d). The input variables
+    'pattern', 'k' and 'd' are read from the DATASET argument, where DATASET is the text file
+    containing the input data.
+    """
+    click.clear()
+
+    data = FrequentWordsMismatchesDataset(dataset)
+
+    if context.obj['CHALLENGE']:
+        text = data.get_text_challenge()
+        k = data.get_k_challenge()
+        d = data.get_d_challenge()
+
+        result = bioinfo1.frequent_words_with_mismatches_and_reverse_complement(text, k, d)
+
+        click.echo(f"The result of the Coding Challenge is:")
+        click.echo(click.style(f"{' '.join(map(str, result))}", fg="yellow", bold=True))
+    else:
+        text = data.get_text()
+        k = data.get_k()
+        d = data.get_d()
+
+        correct_result = data.get_expected_result()
+
+        result = bioinfo1.frequent_words_with_mismatches_and_reverse_complement(text, k, d)
 
         # prepare result for output by sorting and joining
 

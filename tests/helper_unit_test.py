@@ -2904,6 +2904,37 @@ class DatasetReaderTests(unittest.TestCase):
         self.assertEqual(test_dataset.get_k_challenge(), 5)
         self.assertEqual(test_dataset.get_d_challenge(), 3)
 
+    def test_read_frequent_words_mismatches_and_reverse_complements(self):
+        """
+        """
+        test_dataset = dataset_reader.FrequentWordsMismatchesDataset('../tests/testdata/' +
+                                                                     'frequent_words_mismatch' +
+                                                                     '_complements.txt')
+        self.assertEqual(test_dataset.get_text(), 'CTTGCCGGCGCCGATTATACGATCGCGGCCGCTTGCCTTCTTTAT' +
+                                                  'AATGCATCGGCGCCGCGATCTTGCTATATACGTACGCTTCGCTTG' +
+                                                  'CATCTTGCGCGCATTACGTACTTATCGATTACTTATCTTCGATGC' +
+                                                  'CGGCCGGCATATGCCGCTTTAGCATCGATCGATCGTACTTTACGC' +
+                                                  'GTATAGCCGCTTCGCTTGCCGTACGCGATGCTAGCATATGCTAGC' +
+                                                  'GCTAATTACTTAT')
+        self.assertEqual(test_dataset.get_k(), 9)
+        self.assertEqual(test_dataset.get_d(), 3)
+        self.assertEqual(test_dataset.get_expected_result(), ['AGCGCCGCT', 'AGCGGCGCT'])
+
+    def test_read_frequent_words_mismatches_and_reverse_complements_challenge(self):
+        """
+        """
+        test_dataset = dataset_reader.FrequentWordsMismatchesDataset('../tests/testdata/' +
+                                                                     'frequent_words_mismatch' +
+                                                                     '_complements_challenge.txt')
+        self.assertEqual(test_dataset.get_text_challenge(), 'ATATCACACACCACCAATGGATATCCAATATATGG' +
+                                                            'TGGTCAATCACAGGATCAGGTATATCAGGTATGGT' +
+                                                            'CAGGGGTGGGGTATATGGTGGGGTATGGTCACCAG' +
+                                                            'GGGGGCCAGGTCCAGGCCAATATGGTCCACCACCA' +
+                                                            'GGCCACCAGGCCAATGGTGGTCCACAGGTGGTCCA' +
+                                                            'GGTGGTCAGGTGGGGATGGTCA')
+        self.assertEqual(test_dataset.get_k_challenge(), 6)
+        self.assertEqual(test_dataset.get_d_challenge(), 2)
+
 
 if __name__ == "__main__":
     unittest.main()
