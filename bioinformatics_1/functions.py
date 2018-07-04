@@ -35,6 +35,7 @@ neighbors(pattern, d)
 computing_frequencies_with_mismatches(text, k, d)
 frequent_words_with_mismatches(text, k, d)
 immediate_neighbors(pattern)
+frequent_words_with_mismatches_and_reverse_complement(text, k, d)
 
 DEPRECATED:
 count_d(pattern, text, d)
@@ -463,7 +464,8 @@ def computing_frequencies_with_mismatches(text: str, k: int, d: int) -> list:
 
 def frequent_words_with_mismatches(text: str, k: int, d: int) -> list:
     """
-    Works as frequent_words, but uses computing_frequencies to improve running time
+    Works as frequent_words, but uses computing_frequencies, while allowing for mismatches to
+    improve running time.
     """
     frequent_patterns = []
     frequency_array = computing_frequencies_with_mismatches(text, k, d)
@@ -493,13 +495,31 @@ def immediate_neighbors(pattern: str) -> list:
     return neighborhood
 
 
+def frequent_words_with_mismatches_and_reverse_complement(text: str, k: int, d: int) -> list:
+    """
+    Find the most frequent k-mers (with mismatches and reverse complements) in a string.
+    Input: A DNA string Text as well as integers k and d.
+    Output: All k-mers Pattern maximizing the sum Countd(Text, Pattern) + Countd(Text, Patternrc)
+    over all possible k-mers.
+    """
+    frequent_patterns = []
+
+    frequency_array_text = computing_frequencies_with_mismatches(text, k, d)
+    frequency_array_rc = computing_frequencies_with_mismatches(reverse_complement(text), k, d)
+
+    frequency_array = [frequency_array_text[i] +
+                       frequency_array_rc[i] for i in range(len(frequency_array_text))]
+
+    max_count = max(frequency_array)
+
+    for i in range(NUMBER_OF_SYMBOLS**k):
+        if frequency_array[i] == max_count:
+            frequent_patterns.append(number_to_pattern(i, k))
+
+    return frequent_patterns
+
+
 def main():
-    failed_test = frequent_words_with_mismatches('AAT', 3, 0)
-    failed_neighbors = neighbors('AAT', 0)
-    failed_frequencies = computing_frequencies_with_mismatches('AAT', 3, 0)
-    print(failed_neighbors, type(failed_neighbors))
-    print(failed_frequencies)
-    print(failed_test)
     pass
 
 

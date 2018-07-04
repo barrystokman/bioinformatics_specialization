@@ -3683,7 +3683,7 @@ class FrequentWordsWithMismatchesAndReverseComplementTests(unittest.TestCase):
         test_text = 'TAGCG'
         test_k = 2
         test_d = 1
-        test_output = ['CA', 'CC', 'CG', 'TG']
+        test_output = ['CA', 'CC', 'GG', 'TG']
         self.assertEqual(sorted(bioinfo1.frequent_words_with_mismatches_and_reverse_complement(
                                 test_text, test_k, test_d)), test_output)
 
