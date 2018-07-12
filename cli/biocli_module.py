@@ -500,7 +500,8 @@ def frequent_words_mismatches(context, dataset):
         k = data.get_k_challenge()
         d = data.get_d_challenge()
 
-        result = bioinfo1.frequent_words_with_mismatches(text, k, d)
+        # result = bioinfo1.frequent_words_with_mismatches(text, k, d)
+        result = bioinfo1.frequent_words_with_mismatches_sorting(text, k, d)
 
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{' '.join(map(str, result))}", fg="yellow", bold=True))

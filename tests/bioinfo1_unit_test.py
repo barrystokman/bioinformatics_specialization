@@ -3688,5 +3688,106 @@ class FrequentWordsWithMismatchesAndReverseComplementTests(unittest.TestCase):
                                 test_text, test_k, test_d)), test_output)
 
 
+class FrequentWordsWithMismatchesSortingTests(unittest.TestCase):
+
+    def setUp(self):
+        pass
+
+    def test_frequent_words_mismatches_sorting_sample(self):
+        """
+        """
+        test_text = 'ACGTTGCATGTCGCATGATGCATGAGAGCT'
+        test_k = 4
+        test_d = 1
+        test_output = ['ATGC', 'ATGT', 'GATG']
+        self.assertEqual(sorted(bioinfo1.frequent_words_with_mismatches_sorting(test_text, test_k,
+                                                                                test_d)),
+                                                                                test_output)
+
+    def test_frequent_words_mismatches_sorting_1(self):
+        """
+        This dataset checks that your code includes k-mers that do not actually appear in Text.
+        Notice here that, although none of the output k-mers except for AA actually appear in Text,
+        they are all valid because they appear in Text with up to 1 mismatch (i.e. 0 or 1 mismatch).
+        """
+        test_text = 'AAAAAAAAAA'
+        test_k = 2
+        test_d = 1
+        test_output = sorted(['AA', 'AC', 'AG', 'CA', 'AT', 'GA', 'TA'])
+        self.assertEqual(sorted(bioinfo1.frequent_words_with_mismatches_sorting(test_text, test_k,
+                                                                                test_d)),
+                                                                                test_output)
+
+    def test_frequent_words_mismatches_sorting_2(self):
+        """
+        This dataset makes sure that your code is not accidentally swapping k and d.
+        """
+        test_text = 'AGTCAGTC'
+        test_k = 4
+        test_d = 2
+        test_output = sorted(['TCTC', 'CGGC', 'AAGC', 'TGTG', 'GGCC', 'AGGT', 'ATCC', 'ACTG',
+                              'ACAC', 'AGAG', 'ATTA', 'TGAC', 'AATT', 'CGTT', 'GTTC', 'GGTA',
+                              'AGCA', 'CATC'])
+        self.assertEqual(sorted(bioinfo1.frequent_words_with_mismatches_sorting(test_text, test_k,
+                                                                                test_d)),
+                                                                                test_output)
+
+    def test_frequent_words_mismatches_sorting_3(self):
+        """
+        This dataset makes sure you are not finding patterns in the Reverse Complement of Text
+        (that is the next problem, “Frequent Words with Mismatches and Reverse Complements
+        Problem”).
+        """
+        test_text = 'AATTAATTGGTAGGTAGGTA'
+        test_k = 4
+        test_d = 0
+        test_output = ['GGTA']
+        self.assertEqual(sorted(bioinfo1.frequent_words_with_mismatches_sorting(test_text, test_k,
+                                                                                test_d)),
+                                                                                test_output)
+
+    def test_frequent_words_mismatches_sorting_4(self):
+        """
+        This dataset first checks that k-mers with exactly d mismatches are being found. Then, it
+        checks that k-mers with less than d mismatches are being allowed (i.e. you are not only
+        allowing k-mers with exactly d mismatches). Next, it checks that you are not returning too
+        few k-mers. Last, it checks that you are not returning too many k-mers.
+        """
+        test_text = 'ATA'
+        test_k = 3
+        test_d = 1
+        test_output = sorted(['GTA', 'ACA', 'AAA', 'ATC', 'ATA', 'AGA', 'ATT', 'CTA', 'TTA',
+                              'ATG'])
+        self.assertEqual(sorted(bioinfo1.frequent_words_with_mismatches_sorting(test_text, test_k,
+                                                                                test_d)),
+                                                                                test_output)
+
+    def test_frequent_words_mismatches_sorting_5(self):
+        """
+        This dataset checks that your code is not looking for k-mers in the Reverse Complement of
+        Text.
+        """
+        test_text = 'AAT'
+        test_k = 3
+        test_d = 0
+        test_output = ['AAT']
+        self.assertEqual(sorted(bioinfo1.frequent_words_with_mismatches_sorting(test_text, test_k,
+                                                                                test_d)),
+                                                                                test_output)
+
+    def test_frequent_words_mismatches_sorting_6(self):
+        """
+        This dataset checks that your code correctly delimiting your output (i.e. using spaces) and
+        verifies that our k-mers are actually of length k.
+        """
+        test_text = 'TAGCG'
+        test_k = 2
+        test_d = 1
+        test_output = ['GG', 'TG']
+        self.assertEqual(sorted(bioinfo1.frequent_words_with_mismatches_sorting(test_text, test_k,
+                                                                                test_d)),
+                                                                                test_output)
+
+
 if __name__ == "__main__":
         unittest.main()

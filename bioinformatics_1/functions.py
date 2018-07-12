@@ -36,6 +36,7 @@ computing_frequencies_with_mismatches(text, k, d)
 frequent_words_with_mismatches(text, k, d)
 immediate_neighbors(pattern)
 frequent_words_with_mismatches_and_reverse_complement(text, k, d)
+frequent_words_with_mismatches_sorting(text, k, d)
 
 DEPRECATED:
 count_d(pattern, text, d)
@@ -517,6 +518,38 @@ def frequent_words_with_mismatches_and_reverse_complement(text: str, k: int, d: 
             frequent_patterns.append(number_to_pattern(i, k))
 
     return frequent_patterns
+
+
+def frequent_words_with_mismatches_sorting(text: str, k: int, d: int) -> list:
+    """
+    More efficient version of frequent_words_with_mismatches using sorting.
+    """
+    frequent_patterns = []
+    index = []
+
+    neighborhoods = [neighbors(text[i:i+k], d) for i in range(len(text) - k + 1)]
+
+    neighborhood_array = [neighbor for neighborhood in neighborhoods for neighbor in
+                          neighborhood]
+
+    for i in range(len(neighborhood_array)):
+        pattern = neighborhood_array[i]
+        index.append(pattern_to_number(pattern))
+
+    count = [1 for index in range(len(neighborhood_array))]
+    sorted_index = sorted(index)
+
+    for i in range(len(neighborhood_array) - 1):
+        if sorted_index[i] == sorted_index[i + 1]:
+            count[i + 1] = count[i] + 1
+
+    max_count = max(count)
+
+    for i in range(len(neighborhood_array)):
+        if count[i] == max_count:
+            frequent_patterns.append(number_to_pattern(sorted_index[i], k))
+
+    return sorted(list(set(frequent_patterns)))
 
 
 def main():
