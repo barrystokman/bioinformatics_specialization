@@ -9,7 +9,8 @@ from helper.constants import DATASET_PATH
 
 class ReadDataset:
 
-    def __init__(self, file_name):
+    def __init__(self, file_name, challenge=False):
+        self.challenge = challenge
         with open(DATASET_PATH + file_name) as f:
             self.lines = [line for line in f]
 
@@ -18,287 +19,317 @@ class ReadDataset:
         for line in self.lines:
             return_str += line
         return_str += '\nThis file contains ' + str(len(self.lines)) + ' lines.'
+        return_str += '\nThe challenge flag is ' + str(self.challenge) + '.'
 
         return return_str
 
 
 class PatternCountDataset(ReadDataset):
 
-    def get_text(self):
-        return str(self.lines[1]).rstrip()
+    @property
+    def text(self):
+        if self.challenge:
+            return self.lines[0].rstrip()
+        else:
+            return str(self.lines[1]).rstrip()
 
-    def get_pattern(self):
-        return self.lines[2].rstrip()
+    @property
+    def pattern(self):
+        if self.challenge:
+            return self.lines[1].rstrip()
+        else:
+            return self.lines[2].rstrip()
 
-    def get_expected_result(self):
+    @property
+    def result(self):
         return int(self.lines[4])
-
-    def get_text_challenge(self):
-        return self.lines[0].rstrip()
-
-    def get_pattern_challenge(self):
-        return self.lines[1].rstrip()
 
 
 class FrequentWordsDataset(ReadDataset):
 
-    def get_text(self):
-        return self.lines[1].rstrip()
+    @property
+    def text(self):
+        if self.challenge:
+            return self.lines[0].rstrip()
+        else:
+            return self.lines[1].rstrip()
 
-    def get_k(self):
-        return int(self.lines[2])
+    @property
+    def k(self):
+        if self.challenge:
+            return int(self.lines[1])
+        else:
+            return int(self.lines[2])
 
-    def get_expected_result(self):
+    @property
+    def result(self):
         return self.lines[4].rstrip()
-
-    def get_text_challenge(self):
-        return self.lines[0].rstrip()
-
-    def get_k_challenge(self):
-        return int(self.lines[1])
 
 
 class ReverseComplementDataset(ReadDataset):
 
-    def get_pattern(self):
-        return self.lines[1].rstrip()
+    @property
+    def pattern(self):
+        if self.challenge:
+            return self.lines[0].rstrip()
+        else:
+            return self.lines[1].rstrip()
 
-    def get_expected_result(self):
+    @property
+    def result(self):
         return self.lines[3].rstrip()
-
-    def get_pattern_challenge(self):
-        return self.lines[0].rstrip()
 
 
 class PatternMatchingDataset(ReadDataset):
 
-    def get_pattern(self):
-        return self.lines[1].rstrip()
+    @property
+    def pattern(self):
+        if self.challenge:
+            return self.lines[0].rstrip()
+        else:
+            return self.lines[1].rstrip()
 
-    def get_genome(self):
-        return self.lines[2].rstrip()
+    @property
+    def genome(self):
+        if self.challenge:
+            return self.lines[1].rstrip()
+        else:
+            return self.lines[2].rstrip()
 
-    def get_expected_result(self):
+    @property
+    def result(self):
         return self.lines[4].rstrip()
-
-    def get_pattern_challenge(self):
-        return self.lines[0].rstrip()
-
-    def get_genome_challenge(self):
-        return self.lines[1].rstrip()
 
 
 class ClumpFindingDataset(ReadDataset):
 
-    def get_genome(self):
-        return self.lines[1].rstrip()
+    @property
+    def genome(self):
+        if self.challenge:
+            return self.lines[0].rstrip()
+        else:
+            return self.lines[1].rstrip()
 
     def _get_variables(self):
-        return [int(var) for var in self.lines[2].split(' ')]
+        if self.challenge:
+            return [int(var) for var in self.lines[1].split(' ')]
+        else:
+            return [int(var) for var in self.lines[2].split(' ')]
 
-    def get_k(self):
+    @property
+    def k(self):
         return self._get_variables()[0]
 
-    def get_l(self):
+    @property
+    def l(self):
         return self._get_variables()[1]
 
-    def get_t(self):
+    @property
+    def t(self):
         return self._get_variables()[2]
 
-    def get_expected_result(self):
+    @property
+    def result(self):
         return self.lines[4].rstrip()
-
-    def get_genome_challenge(self):
-        return self.lines[0].rstrip()
-
-    def _get_variables_challenge(self):
-        return [int(var) for var in self.lines[1].split(' ')]
-
-    def get_k_challenge(self):
-        return self._get_variables_challenge()[0]
-
-    def get_l_challenge(self):
-        return self._get_variables_challenge()[1]
-
-    def get_t_challenge(self):
-        return self._get_variables_challenge()[2]
 
 
 class ComputingFrequenciesDataset(ReadDataset):
 
-    def get_text(self):
-        return self.lines[1].rstrip()
+    @property
+    def text(self):
+        if self.challenge:
+            return self.lines[0].rstrip()
+        else:
+            return self.lines[1].rstrip()
 
-    def get_k(self):
-        return int(self.lines[2])
+    @property
+    def k(self):
+        if self.challenge:
+            return int(self.lines[1])
+        else:
+            return int(self.lines[2])
 
-    def get_expected_result(self):
+    @property
+    def result(self):
         return self.lines[4].rstrip()
-
-    def get_text_challenge(self):
-        return self.lines[0].rstrip()
-
-    def get_k_challenge(self):
-        return int(self.lines[1])
 
 
 class PatternToNumberDataset(ReadDataset):
 
-    def get_pattern(self):
-        return self.lines[1].rstrip()
+    @property
+    def pattern(self):
+        if self.challenge:
+            return self.lines[0].rstrip()
+        else:
+            return self.lines[1].rstrip()
 
-    def get_expected_result(self):
+    @property
+    def result(self):
         return int(self.lines[3])
-
-    def get_pattern_challenge(self):
-        return self.lines[0].rstrip()
 
 
 class NumberToPatternDataset(ReadDataset):
 
-    def get_number(self):
-        return int(self.lines[1])
+    @property
+    def number(self):
+        if self.challenge:
+            return int(self.lines[0])
+        else:
+            return int(self.lines[1])
 
-    def get_k(self):
-        return int(self.lines[2])
+    @property
+    def k(self):
+        if self.challenge:
+            return int(self.lines[1])
+        else:
+            return int(self.lines[2])
 
-    def get_expected_result(self):
+    @property
+    def result(self):
         return self.lines[4]
-
-    def get_number_challenge(self):
-        return int(self.lines[0])
-
-    def get_k_challenge(self):
-        return int(self.lines[1])
 
 
 class MinimumSkewDataset(ReadDataset):
 
-    def get_genome(self):
-        return self.lines[1].rstrip()
+    @property
+    def genome(self):
+        if self.challenge:
+            return self.lines[0].rstrip()
+        else:
+            return self.lines[1].rstrip()
 
-    def get_expected_result(self):
+    @property
+    def result(self):
         return self.lines[3].rstrip()
-
-    def get_genome_challenge(self):
-        return self.lines[0].rstrip()
 
 
 class HammingDistanceDataset(ReadDataset):
 
-    def get_string1(self):
-        return self.lines[1].rstrip()
+    @property
+    def string1(self):
+        if self.challenge:
+            return self.lines[0].rstrip()
+        else:
+            return self.lines[1].rstrip()
 
-    def get_string2(self):
-        return self.lines[2].rstrip()
+    @property
+    def string2(self):
+        if self.challenge:
+            return self.lines[1].rstrip()
+        else:
+            return self.lines[2].rstrip()
 
-    def get_expected_result(self):
+    @property
+    def result(self):
         return int(self.lines[4])
-
-    def get_string1_challenge(self):
-        return self.lines[0].rstrip()
-
-    def get_string2_challenge(self):
-        return self.lines[1].rstrip()
 
 
 class ApproxMatchDataset(ReadDataset):
 
-    def get_pattern(self):
-        return self.lines[1].rstrip()
+    @property
+    def pattern(self):
+        if self.challenge:
+            return self.lines[0].rstrip()
+        else:
+            return self.lines[1].rstrip()
 
-    def get_text(self):
-        return self.lines[2].rstrip()
+    @property
+    def text(self):
+        if self.challenge:
+            return self.lines[1].rstrip()
+        else:
+            return self.lines[2].rstrip()
 
-    def get_d(self):
-        return int(self.lines[3])
+    @property
+    def d(self):
+        if self.challenge:
+            return int(self.lines[2])
+        else:
+            return int(self.lines[3])
 
-    def get_expected_result(self):
+    @property
+    def result(self):
         return self.lines[5].rstrip()
-
-    def get_pattern_challenge(self):
-        return self.lines[0].rstrip()
-
-    def get_text_challenge(self):
-        return self.lines[1].rstrip()
-
-    def get_d_challenge(self):
-        return int(self.lines[2])
 
 
 class ApproxCountDataset(ReadDataset):
 
-    def get_pattern(self):
-        return self.lines[1].rstrip()
+    @property
+    def pattern(self):
+        if self.challenge:
+            return self.lines[0].rstrip()
+        else:
+            return self.lines[1].rstrip()
 
-    def get_text(self):
-        return self.lines[2].rstrip()
+    @property
+    def text(self):
+        if self.challenge:
+            return self.lines[1].rstrip()
+        else:
+            return self.lines[2].rstrip()
 
-    def get_d(self):
-        return int(self.lines[3])
+    @property
+    def d(self):
+        if self.challenge:
+            return int(self.lines[2])
+        else:
+            return int(self.lines[3])
 
-    def get_expected_result(self):
+    @property
+    def result(self):
         return int(self.lines[5])
-
-    def get_pattern_challenge(self):
-        return self.lines[0].rstrip()
-
-    def get_text_challenge(self):
-        return self.lines[1].rstrip()
-
-    def get_d_challenge(self):
-        return int(self.lines[2])
 
 
 class NeighborsDataset(ReadDataset):
 
-    def get_pattern(self):
-        return self.lines[1].rstrip()
+    @property
+    def pattern(self):
+        if self.challenge:
+            return self.lines[0].rstrip()
+        else:
+            return self.lines[1].rstrip()
 
-    def get_d(self):
-        return int(self.lines[2])
+    @property
+    def d(self):
+        if self.challenge:
+            return int(self.lines[1])
+        else:
+            return int(self.lines[2])
 
-    def get_expected_result(self):
-        expected_result = []
-        for result in self.lines[4:len(self.lines)]:
-            expected_result.append(result.rstrip())
-        return sorted(expected_result)
-
-    def get_pattern_challenge(self):
-        return self.lines[0].rstrip()
-
-    def get_d_challenge(self):
-        return int(self.lines[1])
+    @property
+    def result(self):
+        result = []
+        for neighbor in self.lines[4:len(self.lines)]:
+            result.append(neighbor.rstrip())
+        return sorted(result)
 
 
 class FrequentWordsMismatchesDataset(ReadDataset):
 
-    def get_text(self):
-        return self.lines[1].rstrip()
+    @property
+    def text(self):
+        if self.challenge:
+            return self.lines[0].rstrip()
+        else:
+            return self.lines[1].rstrip()
 
     def _get_variables(self):
-        return [int(var) for var in self.lines[2].split(' ')]
+        if self.challenge:
+            return [int(var) for var in self.lines[1].split(' ')]
+        else:
+            return [int(var) for var in self.lines[2].split(' ')]
 
-    def get_k(self):
+    @property
+    def k(self):
         return self._get_variables()[0]
 
-    def get_d(self):
+    @property
+    def d(self):
         return self._get_variables()[1]
 
-    def get_expected_result(self):
+    @property
+    def result(self):
         return sorted([result.rstrip() for result in self.lines[4].split(' ')])
-
-    def get_text_challenge(self):
-        return self.lines[0].rstrip()
-
-    def _get_variables_challenge(self):
-        return [int(var) for var in self.lines[1].split(' ')]
-
-    def get_k_challenge(self):
-        return self._get_variables_challenge()[0]
-
-    def get_d_challenge(self):
-        return self._get_variables_challenge()[1]
 
 
 def main():
