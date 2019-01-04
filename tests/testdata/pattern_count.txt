@@ -1,5 +1,5 @@
-Output
+Input
 GCGCG
 GCG
-Input
+Output
 2
