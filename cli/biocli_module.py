@@ -42,26 +42,22 @@ def pattern_count(context, dataset):
     Runs pattern_count(text, pattern). The input variables 'text' and 'pattern' are read from the
     DATASET argument, where DATASET is the text file containing the input data.
     """
+    challenge = context.obj['CHALLENGE']
     click.clear()
 
-    data = PatternCountDataset(dataset)
+    data = PatternCountDataset(dataset, challenge)
 
-    if context.obj['CHALLENGE']:
-        text = data.get_text_challenge()
-        pattern = data.get_pattern_challenge()
+    text = data.text
+    pattern = data.pattern
 
+    if challenge:
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{bioinfo1.pattern_count(text, pattern)}",
                                fg="yellow", bold=True))
     else:
-        text = data.get_text()
-        pattern = data.get_pattern()
-        correct_result = data.get_expected_result()
-
+        correct_result = data.result
         result = bioinfo1.pattern_count(text, pattern)
-
         text_color = result_color(result, correct_result)
-
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
 
@@ -74,30 +70,24 @@ def frequent_words(context, dataset):
     Runs frequent_words_by_sorting(text, k). The input variables 'text' and 'k' are read from the
     DATASET argument, where DATASET is the text file containing the input data.
     """
+    challenge = context.obj['CHALLENGE']
     click.clear()
 
-    data = FrequentWordsDataset(dataset)
+    data = FrequentWordsDataset(dataset, challenge)
 
-    if context.obj['CHALLENGE']:
-        text = data.get_text_challenge()
-        k = data.get_k_challenge()
+    text = data.text
+    k = data.k
 
+    if challenge:
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{' '.join(sorted(bioinfo1.frequent_words_by_sorting(text, k)))}",
                                fg="yellow", bold=True))
     else:
-        text = data.get_text()
-        k = data.get_k()
-        correct_result = data.get_expected_result()
-
+        correct_result = data.result
         result = bioinfo1.frequent_words_by_sorting(text, k)
-
         # prepare result for output by sorting and joining
-
         result = ' '.join(sorted(result))
-
         text_color = result_color(result, correct_result)
-
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
 
@@ -110,24 +100,21 @@ def reverse_complement(context, dataset):
     Runs reverse_complement(pattern). The input variable 'pattern' is read from the DATASET
     argument, where DATASET is the text file containing the input data.
     """
+    challenge = context.obj['CHALLENGE']
     click.clear()
 
-    data = ReverseComplementDataset(dataset)
+    data = ReverseComplementDataset(dataset, challenge)
 
-    if context.obj['CHALLENGE']:
-        pattern = data.get_pattern_challenge()
+    pattern = data.pattern
 
+    if challenge:
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{bioinfo1.reverse_complement(pattern)}",
                                fg="yellow", bold=True))
     else:
-        pattern = data.get_pattern()
-        correct_result = data.get_expected_result()
-
+        correct_result = data.result
         result = bioinfo1.reverse_complement(pattern)
-
         text_color = result_color(result, correct_result)
-
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
 
@@ -141,15 +128,16 @@ def pattern_matching(context, dataset):
     read from the DATASET argument, where DATASET is the text file containing the input data. This
     function is only available in Code Challenge mode.
     """
+    challenge = context.obj['CHALLENGE']
     click.clear()
 
-    data = PatternMatchingDataset(dataset)
+    data = PatternMatchingDataset(dataset, challenge)
 
-    if context.obj['CHALLENGE']:
-        pattern = data.get_pattern_challenge()
-        genome = data.get_genome_challenge()
+    pattern = data.pattern
+    genome = data.genome
+
+    if challenge:
         result = bioinfo1.pattern_matching_problem(pattern, genome)
-
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{' '.join(map(str, result))}", fg="yellow", bold=True))
     else:
@@ -166,36 +154,29 @@ def clump_finding(context, dataset):
     Runs better_clump_finding(genome, k, l, t). The input variables 'genome', 'k', 'l', and 't' are
     read from the DATASET argument, where DATASET is the text file containing the input data.
     """
+    challenge = context.obj['CHALLENGE']
     click.clear()
 
-    data = ClumpFindingDataset(dataset)
+    data = ClumpFindingDataset(dataset, challenge)
 
     if context.obj['CHALLENGE']:
-        genome = data.get_genome_challenge()
-        var_k = data.get_k_challenge()
-        var_l = data.get_l_challenge()
-        var_t = data.get_t_challenge()
-
+        genome = data.genome
+        var_k = data.k
+        var_l = data.l
+        var_t = data.t
         result = bioinfo1.better_clump_finding(genome, var_k, var_l, var_t)
-
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{' '.join(map(str, result))}", fg="yellow", bold=True))
     else:
-        genome = data.get_genome()
-        var_k = data.get_k()
-        var_l = data.get_l()
-        var_t = data.get_t()
-
-        correct_result = data.get_expected_result()
-
+        genome = data.genome
+        var_k = data.k
+        var_l = data.l
+        var_t = data.t
+        correct_result = data.result
         result = bioinfo1.better_clump_finding(genome, var_k, var_l, var_t)
-
         # prepare result for output by sorting and joining
-
         result = ' '.join(sorted(result))
-
         text_color = result_color(result, correct_result)
-
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
 
@@ -208,30 +189,25 @@ def computing_frequencies(context, dataset):
     Runs computing_frequencies(text, k). The input variables 'text' and 'k' are read from the
     DATASET argument, where DATASET is the text file containing the input data.
     """
+    challenge = context.obj['CHALLENGE']
     click.clear()
 
-    data = ComputingFrequenciesDataset(dataset)
+    data = ComputingFrequenciesDataset(dataset, challenge)
 
     if context.obj['CHALLENGE']:
-        text = data.get_text_challenge()
-        k = data.get_k_challenge()
-
+        text = data.text
+        k = data.k
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{' '.join(map(str, bioinfo1.computing_frequencies(text, k)))}",
                                fg="yellow", bold=True))
     else:
-        text = data.get_text()
-        k = data.get_k()
-        correct_result = data.get_expected_result()
-
+        text = data.text
+        k = data.k
+        correct_result = data.result
         result = bioinfo1.computing_frequencies(text, k)
-
         # prepare result for output by sorting and joining
-
         result = ' '.join(map(str, result))
-
         text_color = result_color(result, correct_result)
-
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
 
@@ -244,24 +220,21 @@ def pattern_to_number(context, dataset):
     Runs pattern_to_number(pattern). The input variable 'pattern' is read from the DATASET
     argument, where DATASET is the text file containing the input data.
     """
+    challenge = context.obj['CHALLENGE']
     click.clear()
 
-    data = PatternToNumberDataset(dataset)
+    data = PatternToNumberDataset(dataset, challenge)
 
     if context.obj['CHALLENGE']:
-        pattern = data.get_pattern_challenge()
-
+        pattern = data.pattern
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{bioinfo1.pattern_to_number(pattern)}",
                                fg="yellow", bold=True))
     else:
-        pattern = data.get_pattern()
-        correct_result = data.get_expected_result()
-
+        pattern = data.pattern
+        correct_result = data.result
         result = bioinfo1.pattern_to_number(pattern)
-
         text_color = result_color(result, correct_result)
-
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
 
@@ -274,26 +247,23 @@ def number_to_pattern(context, dataset):
     Runs number_to_pattern(number, k). The input variables 'number' and 'k' are read from the
     DATASET argument, where DATASET is the text file containing the input data.
     """
+    challenge = context.obj['CHALLENGE']
     click.clear()
 
-    data = NumberToPatternDataset(dataset)
+    data = NumberToPatternDataset(dataset, challenge)
 
     if context.obj['CHALLENGE']:
-        number = data.get_number_challenge()
-        k = data.get_k_challenge()
-
+        number = data.number
+        k = data.k
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{bioinfo1.number_to_pattern(number, k)}",
                                fg="yellow", bold=True))
     else:
-        number = data.get_number()
-        k = data.get_k()
-        correct_result = data.get_expected_result()
-
+        number = data.number
+        k = data.k
+        correct_result = data.result
         result = bioinfo1.number_to_pattern(number, k)
-
         text_color = result_color(result, correct_result)
-
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
 
@@ -306,28 +276,23 @@ def minimum_skew(context, dataset):
     Runs minimum_skew(genome). The input variable 'genome' is read from the DATASET argument, where
     DATASET is the text file containing the input data.
     """
+    challenge = context.obj['CHALLENGE']
     click.clear()
 
-    data = MinimumSkewDataset(dataset)
+    data = MinimumSkewDataset(dataset, challenge)
 
     if context.obj['CHALLENGE']:
-        genome = data.get_genome_challenge()
-
+        genome = data.genome
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{' '.join(map(str, bioinfo1.minimum_skew(genome)))}",
                                fg="yellow", bold=True))
     else:
-        genome = data.get_genome()
-        correct_result = data.get_expected_result()
-
+        genome = data.genome
+        correct_result = data.result
         result = bioinfo1.minimum_skew(genome)
-
         # prepare result for output by sorting and joining
-
         result = ' '.join(map(str, result))
-
         text_color = result_color(result, correct_result)
-
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
 
@@ -340,27 +305,23 @@ def hamming_distance(context, dataset):
     Runs hamming_distance(string1, string2). The input variables 'string1' and 'string2' are read
     from the DATASET argument, where DATASET is the text file containing the input data.
     """
+    challenge = context.obj['CHALLENGE']
     click.clear()
 
-    data = HammingDistanceDataset(dataset)
+    data = HammingDistanceDataset(dataset, challenge)
 
     if context.obj['CHALLENGE']:
-        string1 = data.get_string1_challenge()
-        string2 = data.get_string2_challenge()
-
+        string1 = data.string1
+        string2 = data.string2
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{bioinfo1.hamming_distance(string1, string2)}",
                                fg="yellow", bold=True))
     else:
-        string1 = data.get_string1()
-        string2 = data.get_string2()
-
-        correct_result = data.get_expected_result()
-
+        string1 = data.string1
+        string2 = data.string2
+        correct_result = data.result
         result = bioinfo1.hamming_distance(string1, string2)
-
         text_color = result_color(result, correct_result)
-
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
 
@@ -373,34 +334,24 @@ def approx_matching(context, dataset):
     Runs approx_matching(pattern, text, d). The input variables 'pattern' and 'text' are read from
     the DATASET argument, where DATASET is the text file containing the input data.
     """
+    challenge = context.obj['CHALLENGE']
     click.clear()
 
-    data = ApproxMatchDataset(dataset)
+    data = ApproxMatchDataset(dataset, challenge)
 
-    if context.obj['CHALLENGE']:
-        pattern = data.get_pattern_challenge()
-        text = data.get_text_challenge()
-        d = data.get_d_challenge()
+    pattern = data.pattern
+    text = data.text
+    d = data.d
 
+    if challenge:
         result = bioinfo1.approx_pattern_match(pattern, text, d)
-
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{' '.join(map(str, result))}", fg="yellow", bold=True))
     else:
-        pattern = data.get_pattern()
-        text = data.get_text()
-        d = data.get_d()
-
-        correct_result = data.get_expected_result()
-
+        correct_result = data.result
         result = bioinfo1.approx_pattern_match(pattern, text, d)
-
-        # prepare result for output by sorting and joining
-
         result = ' '.join(map(str, (result)))
-
         text_color = result_color(result, correct_result)
-
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
 
@@ -413,29 +364,23 @@ def approx_count(context, dataset):
     Runs approx_pattern_count(pattern, text, d). The input variables 'pattern', 'text' and 'd' are
     read from the DATASET argument, where DATASET is the text file containing the input data.
     """
+    challenge = context.obj['CHALLENGE']
     click.clear()
 
-    data = ApproxCountDataset(dataset)
+    data = ApproxCountDataset(dataset, challenge)
 
-    if context.obj['CHALLENGE']:
-        pattern = data.get_pattern_challenge()
-        text = data.get_text_challenge()
-        d = data.get_d_challenge()
+    pattern = data.pattern
+    text = data.text
+    d = data.d
 
+    if challenge:
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{bioinfo1.approx_pattern_count(pattern, text, d)}",
                                fg="yellow", bold=True))
     else:
-        pattern = data.get_pattern()
-        text = data.get_text()
-        d = data.get_d()
-
-        correct_result = data.get_expected_result()
-
+        correct_result = data.result
         result = bioinfo1.approx_pattern_count(pattern, text, d)
-
         text_color = result_color(result, correct_result)
-
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
 
@@ -448,37 +393,25 @@ def neighbors(context, dataset):
     Runs neighbors(pattern, d). The input variables 'pattern' and 'd' are read from the DATASET
     argument, where DATASET is the text file containing the input data.
     """
+    challenge = context.obj['CHALLENGE']
     click.clear()
 
-    data = NeighborsDataset(dataset)
+    data = NeighborsDataset(dataset, challenge)
 
-    if context.obj['CHALLENGE']:
-        pattern = data.get_pattern_challenge()
-        d = data.get_d_challenge()
+    pattern = data.pattern
+    d = data.d
 
+    if challenge:
         result = bioinfo1.neighbors(pattern, d)
-
-        # backlashes in f-string expressions are not allowed. Assigning '\n' to a variable can
-        # circumvent this:
         nl = '\n'
-
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{nl}{nl.join(sorted(result))}", fg="yellow", bold=True))
     else:
-        pattern = data.get_pattern()
-        d = data.get_d()
-
-        correct_result = data.get_expected_result()
-
+        correct_result = data.result
         result = bioinfo1.neighbors(pattern, d)
-
-        # prepare result for output by sorting and joining
-
         correct_result = ' '.join(sorted(correct_result))
         result = ' '.join(sorted(result))
-
         text_color = result_color(result, correct_result)
-
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
 
@@ -491,36 +424,25 @@ def frequent_words_mismatches(context, dataset):
     Runs frequent_words_with_mismatches(pattern, k, d). The input variables 'pattern', 'k' and 'd'
     are read from the DATASET argument, where DATASET is the text file containing the input data.
     """
+    challenge = context.obj['CHALLENGE']
     click.clear()
 
-    data = FrequentWordsMismatchesDataset(dataset)
+    data = FrequentWordsMismatchesDataset(dataset, challenge)
 
-    if context.obj['CHALLENGE']:
-        text = data.get_text_challenge()
-        k = data.get_k_challenge()
-        d = data.get_d_challenge()
+    text = data.text
+    k = data.k
+    d = data.d
 
-        # result = bioinfo1.frequent_words_with_mismatches(text, k, d)
+    if challenge:
         result = bioinfo1.frequent_words_with_mismatches_sorting(text, k, d)
-
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{' '.join(map(str, result))}", fg="yellow", bold=True))
     else:
-        text = data.get_text()
-        k = data.get_k()
-        d = data.get_d()
-
-        correct_result = data.get_expected_result()
-
+        correct_result = data.result
         result = bioinfo1.frequent_words_with_mismatches(text, k, d)
-
-        # prepare result for output by sorting and joining
-
         correct_result = ' '.join(sorted(correct_result))
         result = ' '.join(sorted(result))
-
         text_color = result_color(result, correct_result)
-
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
 
@@ -534,35 +456,25 @@ def frequent_words_mismatches_and_reverse_complement(context, dataset):
     'pattern', 'k' and 'd' are read from the DATASET argument, where DATASET is the text file
     containing the input data.
     """
+    challenge = context.obj['CHALLENGE']
     click.clear()
 
-    data = FrequentWordsMismatchesDataset(dataset)
+    data = FrequentWordsMismatchesDataset(dataset, challenge)
 
-    if context.obj['CHALLENGE']:
-        text = data.get_text_challenge()
-        k = data.get_k_challenge()
-        d = data.get_d_challenge()
+    text = data.text
+    k = data.k
+    d = data.d
 
+    if challenge:
         result = bioinfo1.frequent_words_with_mismatches_and_reverse_complement(text, k, d)
-
         click.echo(f"The result of the Coding Challenge is:")
         click.echo(click.style(f"{' '.join(map(str, result))}", fg="yellow", bold=True))
     else:
-        text = data.get_text()
-        k = data.get_k()
-        d = data.get_d()
-
-        correct_result = data.get_expected_result()
-
+        correct_result = data.result
         result = bioinfo1.frequent_words_with_mismatches_and_reverse_complement(text, k, d)
-
-        # prepare result for output by sorting and joining
-
         correct_result = ' '.join(sorted(correct_result))
         result = ' '.join(sorted(result))
-
         text_color = result_color(result, correct_result)
-
         click.echo(click.style(f"The result of this function is:"))
         click.echo(click.style(f"{result}", fg=text_color, bold=True))
 
