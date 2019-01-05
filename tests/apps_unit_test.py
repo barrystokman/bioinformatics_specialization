@@ -1,6 +1,6 @@
 import unittest
 
-import helper.dataset_reader as dataset_reader
+import apps.dataset_reader as dataset_reader
 
 
 class DatasetReaderTests(unittest.TestCase):

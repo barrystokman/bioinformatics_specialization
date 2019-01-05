@@ -4,7 +4,7 @@ variables.
 Main class: ReadDataset: instantiating this class reads the file specified on the CLI
 Subclasses: xxxDataset: returns variables <var1>, <var2>, ..., <varn> for function <func>
 """
-from helper.constants import DATASET_PATH
+from apps.constants import DATASET_PATH
 
 
 class ReadDataset:
