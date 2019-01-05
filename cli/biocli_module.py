@@ -1,22 +1,22 @@
 import click
 
 from bioinformatics_1 import functions as bioinfo1
-from helper.cli_helper import result_color
-from helper.dataset_reader import (PatternCountDataset,
-                                   FrequentWordsDataset,
-                                   ReverseComplementDataset,
-                                   PatternMatchingDataset,
-                                   ClumpFindingDataset,
-                                   ComputingFrequenciesDataset,
-                                   PatternToNumberDataset,
-                                   NumberToPatternDataset,
-                                   MinimumSkewDataset,
-                                   HammingDistanceDataset,
-                                   ApproxMatchDataset,
-                                   ApproxCountDataset,
-                                   NeighborsDataset,
-                                   FrequentWordsMismatchesDataset
-                                   )
+from apps.cli_helper import result_color
+from apps.dataset_reader import (PatternCountDataset,
+                                 FrequentWordsDataset,
+                                 ReverseComplementDataset,
+                                 PatternMatchingDataset,
+                                 ClumpFindingDataset,
+                                 ComputingFrequenciesDataset,
+                                 PatternToNumberDataset,
+                                 NumberToPatternDataset,
+                                 MinimumSkewDataset,
+                                 HammingDistanceDataset,
+                                 ApproxMatchDataset,
+                                 ApproxCountDataset,
+                                 NeighborsDataset,
+                                 FrequentWordsMismatchesDataset
+                                 )
 
 
 @click.group()
