@@ -331,7 +331,7 @@ def pattern_to_number(pattern: str) -> int:
         return 4 * pattern_to_number(prefix) + SYMBOL_TO_NUMBER[symbol]
 
 
-def skew(genome: str) -> int:
+def skew(genome: str) -> list:
     """
     We define skew_i(genome) as the difference between the total number of occurrences of G and the
     total number of occurrences of C in the first i nucleotides of Genome.
