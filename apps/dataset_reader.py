@@ -332,6 +332,13 @@ class FrequentWordsMismatchesDataset(ReadDataset):
         return sorted([result.rstrip() for result in self.lines[4].split(' ')])
 
 
+class Genome(ReadDataset):
+
+    @property
+    def genome(self):
+        return self.lines[0].rstrip()
+
+
 def main():
     pass
 
