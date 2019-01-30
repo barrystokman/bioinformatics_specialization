@@ -2962,6 +2962,14 @@ class DatasetReaderTests(unittest.TestCase):
         self.assertEqual(test_dataset.k, 6)
         self.assertEqual(test_dataset.d, 2)
 
+    def test_read_whole_genome(self):
+        """
+        """
+        test_dataset = dataset_reader.Genome('../tests/testdata/whole_genome_test.txt')
+        self.assertEqual(test_dataset.genome, 'AGAGATTACGTCT')
+        self.assertEqual(len(test_dataset.genome), 13)
+        self.assertEqual(type(test_dataset.genome), str)
+
 
 if __name__ == "__main__":
     unittest.main()
