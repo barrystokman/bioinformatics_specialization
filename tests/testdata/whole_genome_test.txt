@@ -1,0 +1,2 @@
+>gi|99999999|ref|NC_009999.9| Testonella enterica subsp. enterica serovar Typhi str. CT18 chromosome, complete genome
+AGAGATTACGTCT
