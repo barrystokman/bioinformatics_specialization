@@ -1,22 +1,10 @@
 import click
+# import matplotlib.pyplot as plt
 
 from bioinformatics_1 import functions as bioinfo1
-from apps.cli_helper import result_color
-from apps.dataset_reader import (PatternCountDataset,
-                                 FrequentWordsDataset,
-                                 ReverseComplementDataset,
-                                 PatternMatchingDataset,
-                                 ClumpFindingDataset,
-                                 ComputingFrequenciesDataset,
-                                 PatternToNumberDataset,
-                                 NumberToPatternDataset,
-                                 MinimumSkewDataset,
-                                 HammingDistanceDataset,
-                                 ApproxMatchDataset,
-                                 ApproxCountDataset,
-                                 NeighborsDataset,
-                                 FrequentWordsMismatchesDataset
-                                 )
+from apps.cli import result_color, cli_output, get_correct_result
+from apps.plot import SkewPlot
+import apps.dataset_reader as dsr
 
 
 @click.group()
@@ -37,446 +25,337 @@ def biocli(context, code_challenge):
 @biocli.command('pattern-count')
 @click.argument('dataset', required=True)
 @click.pass_context
-def pattern_count(context, dataset):
+def pattern_count(context, dataset, sort_result=False, listing=False):
     """
     Runs pattern_count(text, pattern). The input variables 'text' and 'pattern' are read from the
     DATASET argument, where DATASET is the text file containing the input data.
     """
     challenge = context.obj['CHALLENGE']
-    click.clear()
 
-    data = PatternCountDataset(dataset, challenge)
+    data = dsr.PatternCountDataset(dataset, challenge)
 
     text = data.text
     pattern = data.pattern
+    correct_result = get_correct_result(data, challenge)
 
-    if challenge:
-        click.echo(f"The result of the Coding Challenge is:")
-        click.echo(click.style(f"{bioinfo1.pattern_count(text, pattern)}",
-                               fg="yellow", bold=True))
-    else:
-        correct_result = data.result
-        result = bioinfo1.pattern_count(text, pattern)
-        text_color = result_color(result, correct_result)
-        click.echo(click.style(f"The result of this function is:"))
-        click.echo(click.style(f"{result}", fg=text_color, bold=True))
+    args = text, pattern
+    func = bioinfo1.pattern_count
+
+    cli_output(challenge, correct_result, sort_result, func, args)
 
 
 @biocli.command('frequent-words')
 @click.argument('dataset', required=True)
 @click.pass_context
-def frequent_words(context, dataset):
+def frequent_words(context, dataset, sort_result=False, listing=False):
     """
     Runs frequent_words_by_sorting(text, k). The input variables 'text' and 'k' are read from the
     DATASET argument, where DATASET is the text file containing the input data.
     """
     challenge = context.obj['CHALLENGE']
-    click.clear()
 
-    data = FrequentWordsDataset(dataset, challenge)
+    data = dsr.FrequentWordsDataset(dataset, challenge)
 
     text = data.text
     k = data.k
+    correct_result = get_correct_result(data, challenge)
 
-    if challenge:
-        click.echo(f"The result of the Coding Challenge is:")
-        click.echo(click.style(f"{' '.join(sorted(bioinfo1.frequent_words_by_sorting(text, k)))}",
-                               fg="yellow", bold=True))
-    else:
-        correct_result = data.result
-        result = bioinfo1.frequent_words_by_sorting(text, k)
-        # prepare result for output by sorting and joining
-        result = ' '.join(sorted(result))
-        text_color = result_color(result, correct_result)
-        click.echo(click.style(f"The result of this function is:"))
-        click.echo(click.style(f"{result}", fg=text_color, bold=True))
+    args = text, k
+    func = bioinfo1.frequent_words_by_sorting
+    cli_output(challenge, correct_result, sort_result, func, args)
 
 
 @biocli.command('reverse-complement')
 @click.argument('dataset', required=True)
 @click.pass_context
-def reverse_complement(context, dataset):
+def reverse_complement(context, dataset, sort_result=False, listing=False):
     """
     Runs reverse_complement(pattern). The input variable 'pattern' is read from the DATASET
     argument, where DATASET is the text file containing the input data.
     """
     challenge = context.obj['CHALLENGE']
-    click.clear()
 
-    data = ReverseComplementDataset(dataset, challenge)
+    data = dsr.ReverseComplementDataset(dataset, challenge)
 
     pattern = data.pattern
+    correct_result = get_correct_result(data, challenge)
 
-    if challenge:
-        click.echo(f"The result of the Coding Challenge is:")
-        click.echo(click.style(f"{bioinfo1.reverse_complement(pattern)}",
-                               fg="yellow", bold=True))
-    else:
-        correct_result = data.result
-        result = bioinfo1.reverse_complement(pattern)
-        text_color = result_color(result, correct_result)
-        click.echo(click.style(f"The result of this function is:"))
-        click.echo(click.style(f"{result}", fg=text_color, bold=True))
+    args = [pattern]
+    func = bioinfo1.reverse_complement
+    cli_output(challenge, correct_result, sort_result, func, args)
 
 
 @biocli.command('pattern-matching')
 @click.argument('dataset', required=True)
 @click.pass_context
-def pattern_matching(context, dataset):
+def pattern_matching(context, dataset, sort_result=False, listing=False):
     """
     Runs pattern_matching_problem(pattern, genome). The input variables 'pattern' and 'genome' are
     read from the DATASET argument, where DATASET is the text file containing the input data. This
     function is only available in Code Challenge mode.
     """
     challenge = context.obj['CHALLENGE']
-    click.clear()
 
-    data = PatternMatchingDataset(dataset, challenge)
+    data = dsr.PatternMatchingDataset(dataset, challenge)
 
     pattern = data.pattern
     genome = data.genome
+    correct_result = get_correct_result(data, challenge)
 
-    if challenge:
-        result = bioinfo1.pattern_matching_problem(pattern, genome)
-        click.echo(f"The result of the Coding Challenge is:")
-        click.echo(click.style(f"{' '.join(map(str, result))}", fg="yellow", bold=True))
-    else:
-        # no regular data set available for this function
-        click.echo(click.style(f"THIS FUNCTION IS ONLY AVAILABLE IN CODE CHALLENGE MODE!",
-                               fg='red', bold=True))
+    args = pattern, genome
+    func = bioinfo1.pattern_matching_problem
+    cli_output(challenge, correct_result, sort_result, func, args)
 
 
 @biocli.command('clump-finding')
 @click.argument('dataset', required=True)
 @click.pass_context
-def clump_finding(context, dataset):
+def clump_finding(context, dataset, sort_result=False, listing=False):
     """
     Runs better_clump_finding(genome, k, l, t). The input variables 'genome', 'k', 'l', and 't' are
     read from the DATASET argument, where DATASET is the text file containing the input data.
     """
     challenge = context.obj['CHALLENGE']
-    click.clear()
 
-    data = ClumpFindingDataset(dataset, challenge)
+    data = dsr.ClumpFindingDataset(dataset, challenge)
 
-    if context.obj['CHALLENGE']:
-        genome = data.genome
-        var_k = data.k
-        var_l = data.l
-        var_t = data.t
-        result = bioinfo1.better_clump_finding(genome, var_k, var_l, var_t)
-        click.echo(f"The result of the Coding Challenge is:")
-        click.echo(click.style(f"{' '.join(map(str, result))}", fg="yellow", bold=True))
-    else:
-        genome = data.genome
-        var_k = data.k
-        var_l = data.l
-        var_t = data.t
-        correct_result = data.result
-        result = bioinfo1.better_clump_finding(genome, var_k, var_l, var_t)
-        # prepare result for output by sorting and joining
-        result = ' '.join(sorted(result))
-        text_color = result_color(result, correct_result)
-        click.echo(click.style(f"The result of this function is:"))
-        click.echo(click.style(f"{result}", fg=text_color, bold=True))
+    genome = data.genome
+    k = data.k
+    l = data.l
+    t = data.t
+    correct_result = get_correct_result(data, challenge)
+
+    args = genome, k, l, t
+    func = bioinfo1.better_clump_finding
+    cli_output(challenge, correct_result, sort_result, func, args)
 
 
 @biocli.command('computing-frequencies')
 @click.argument('dataset', required=True)
 @click.pass_context
-def computing_frequencies(context, dataset):
+def computing_frequencies(context, dataset, sort_result=False, listing=False):
     """
     Runs computing_frequencies(text, k). The input variables 'text' and 'k' are read from the
     DATASET argument, where DATASET is the text file containing the input data.
     """
     challenge = context.obj['CHALLENGE']
-    click.clear()
 
-    data = ComputingFrequenciesDataset(dataset, challenge)
+    data = dsr.ComputingFrequenciesDataset(dataset, challenge)
 
-    if context.obj['CHALLENGE']:
-        text = data.text
-        k = data.k
-        click.echo(f"The result of the Coding Challenge is:")
-        click.echo(click.style(f"{' '.join(map(str, bioinfo1.computing_frequencies(text, k)))}",
-                               fg="yellow", bold=True))
-    else:
-        text = data.text
-        k = data.k
-        correct_result = data.result
-        result = bioinfo1.computing_frequencies(text, k)
-        # prepare result for output by sorting and joining
-        result = ' '.join(map(str, result))
-        text_color = result_color(result, correct_result)
-        click.echo(click.style(f"The result of this function is:"))
-        click.echo(click.style(f"{result}", fg=text_color, bold=True))
+    text = data.text
+    k = data.k
+    correct_result = get_correct_result(data, challenge)
+
+    args = text, k
+    func = bioinfo1.computing_frequencies
+    cli_output(challenge, correct_result, sort_result, func, args)
 
 
 @biocli.command('pattern-to-number')
 @click.argument('dataset', required=True)
 @click.pass_context
-def pattern_to_number(context, dataset):
+def pattern_to_number(context, dataset, sort_result=False, listing=False):
     """
     Runs pattern_to_number(pattern). The input variable 'pattern' is read from the DATASET
     argument, where DATASET is the text file containing the input data.
     """
     challenge = context.obj['CHALLENGE']
-    click.clear()
 
-    data = PatternToNumberDataset(dataset, challenge)
+    data = dsr.PatternToNumberDataset(dataset, challenge)
 
-    if context.obj['CHALLENGE']:
-        pattern = data.pattern
-        click.echo(f"The result of the Coding Challenge is:")
-        click.echo(click.style(f"{bioinfo1.pattern_to_number(pattern)}",
-                               fg="yellow", bold=True))
-    else:
-        pattern = data.pattern
-        correct_result = data.result
-        result = bioinfo1.pattern_to_number(pattern)
-        text_color = result_color(result, correct_result)
-        click.echo(click.style(f"The result of this function is:"))
-        click.echo(click.style(f"{result}", fg=text_color, bold=True))
+    pattern = data.pattern
+    correct_result = get_correct_result(data, challenge)
+
+    args = [pattern]
+    func = bioinfo1.pattern_to_number
+    cli_output(challenge, correct_result, sort_result, func, args)
 
 
 @biocli.command('number-to-pattern')
 @click.argument('dataset', required=True)
 @click.pass_context
-def number_to_pattern(context, dataset):
+def number_to_pattern(context, dataset, sort_result=False, listing=False):
     """
     Runs number_to_pattern(number, k). The input variables 'number' and 'k' are read from the
     DATASET argument, where DATASET is the text file containing the input data.
     """
     challenge = context.obj['CHALLENGE']
-    click.clear()
 
-    data = NumberToPatternDataset(dataset, challenge)
+    data = dsr.NumberToPatternDataset(dataset, challenge)
 
-    if context.obj['CHALLENGE']:
-        number = data.number
-        k = data.k
-        click.echo(f"The result of the Coding Challenge is:")
-        click.echo(click.style(f"{bioinfo1.number_to_pattern(number, k)}",
-                               fg="yellow", bold=True))
-    else:
-        number = data.number
-        k = data.k
-        correct_result = data.result
-        result = bioinfo1.number_to_pattern(number, k)
-        text_color = result_color(result, correct_result)
-        click.echo(click.style(f"The result of this function is:"))
-        click.echo(click.style(f"{result}", fg=text_color, bold=True))
+    number = data.number
+    k = data.k
+    correct_result = get_correct_result(data, challenge)
+
+    args = number, k
+    func = bioinfo1.number_to_pattern
+    cli_output(challenge, correct_result, sort_result, func, args)
 
 
 @biocli.command('minimum-skew')
 @click.argument('dataset', required=True)
 @click.pass_context
-def minimum_skew(context, dataset):
+def minimum_skew(context, dataset, sort_result=False, listing=False):
     """
     Runs minimum_skew(genome). The input variable 'genome' is read from the DATASET argument, where
     DATASET is the text file containing the input data.
     """
     challenge = context.obj['CHALLENGE']
-    click.clear()
 
-    data = MinimumSkewDataset(dataset, challenge)
+    data = dsr.MinimumSkewDataset(dataset, challenge)
 
-    if context.obj['CHALLENGE']:
-        genome = data.genome
-        click.echo(f"The result of the Coding Challenge is:")
-        click.echo(click.style(f"{' '.join(map(str, bioinfo1.minimum_skew(genome)))}",
-                               fg="yellow", bold=True))
-    else:
-        genome = data.genome
-        correct_result = data.result
-        result = bioinfo1.minimum_skew(genome)
-        # prepare result for output by sorting and joining
-        result = ' '.join(map(str, result))
-        text_color = result_color(result, correct_result)
-        click.echo(click.style(f"The result of this function is:"))
-        click.echo(click.style(f"{result}", fg=text_color, bold=True))
+    genome = data.genome
+    correct_result = get_correct_result(data, challenge)
+
+    args = [genome]
+    func = bioinfo1.minimum_skew
+    cli_output(challenge, correct_result, sort_result, func, args)
 
 
 @biocli.command('hamming-distance')
 @click.argument('dataset', required=True)
 @click.pass_context
-def hamming_distance(context, dataset):
+def hamming_distance(context, dataset, sort_result=False, listing=False):
     """
     Runs hamming_distance(string1, string2). The input variables 'string1' and 'string2' are read
     from the DATASET argument, where DATASET is the text file containing the input data.
     """
     challenge = context.obj['CHALLENGE']
-    click.clear()
 
-    data = HammingDistanceDataset(dataset, challenge)
+    data = dsr.HammingDistanceDataset(dataset, challenge)
 
-    if context.obj['CHALLENGE']:
-        string1 = data.string1
-        string2 = data.string2
-        click.echo(f"The result of the Coding Challenge is:")
-        click.echo(click.style(f"{bioinfo1.hamming_distance(string1, string2)}",
-                               fg="yellow", bold=True))
-    else:
-        string1 = data.string1
-        string2 = data.string2
-        correct_result = data.result
-        result = bioinfo1.hamming_distance(string1, string2)
-        text_color = result_color(result, correct_result)
-        click.echo(click.style(f"The result of this function is:"))
-        click.echo(click.style(f"{result}", fg=text_color, bold=True))
+    string1 = data.string1
+    string2 = data.string2
+    correct_result = get_correct_result(data, challenge)
+
+    args = string1, string2
+    func = bioinfo1.hamming_distance
+    cli_output(challenge, correct_result, sort_result, func, args)
 
 
 @biocli.command('approx-matching')
 @click.argument('dataset', required=True)
 @click.pass_context
-def approx_matching(context, dataset):
+def approx_matching(context, dataset, sort_result=False, listing=False):
     """
-    Runs approx_matching(pattern, text, d). The input variables 'pattern' and 'text' are read from
+    Runs approx_pattern_match(pattern, text, d). The input variables 'pattern' and 'text' are read from
     the DATASET argument, where DATASET is the text file containing the input data.
     """
     challenge = context.obj['CHALLENGE']
-    click.clear()
 
-    data = ApproxMatchDataset(dataset, challenge)
+    data = dsr.ApproxMatchDataset(dataset, challenge)
 
     pattern = data.pattern
     text = data.text
     d = data.d
+    correct_result = get_correct_result(data, challenge)
 
-    if challenge:
-        result = bioinfo1.approx_pattern_match(pattern, text, d)
-        click.echo(f"The result of the Coding Challenge is:")
-        click.echo(click.style(f"{' '.join(map(str, result))}", fg="yellow", bold=True))
-    else:
-        correct_result = data.result
-        result = bioinfo1.approx_pattern_match(pattern, text, d)
-        result = ' '.join(map(str, (result)))
-        text_color = result_color(result, correct_result)
-        click.echo(click.style(f"The result of this function is:"))
-        click.echo(click.style(f"{result}", fg=text_color, bold=True))
+    args = pattern, text, d
+    func = bioinfo1.approx_pattern_match
+    cli_output(challenge, correct_result, sort_result, func, args)
 
 
 @biocli.command('approx-count')
 @click.argument('dataset', required=True)
 @click.pass_context
-def approx_count(context, dataset):
+def approx_count(context, dataset, sort_result=False, listing=False):
     """
     Runs approx_pattern_count(pattern, text, d). The input variables 'pattern', 'text' and 'd' are
     read from the DATASET argument, where DATASET is the text file containing the input data.
     """
     challenge = context.obj['CHALLENGE']
-    click.clear()
 
-    data = ApproxCountDataset(dataset, challenge)
+    data = dsr.ApproxCountDataset(dataset, challenge)
 
     pattern = data.pattern
     text = data.text
     d = data.d
+    correct_result = get_correct_result(data, challenge)
 
-    if challenge:
-        click.echo(f"The result of the Coding Challenge is:")
-        click.echo(click.style(f"{bioinfo1.approx_pattern_count(pattern, text, d)}",
-                               fg="yellow", bold=True))
-    else:
-        correct_result = data.result
-        result = bioinfo1.approx_pattern_count(pattern, text, d)
-        text_color = result_color(result, correct_result)
-        click.echo(click.style(f"The result of this function is:"))
-        click.echo(click.style(f"{result}", fg=text_color, bold=True))
+    args = pattern, text, d
+    func = bioinfo1.approx_pattern_count
+    cli_output(challenge, correct_result, sort_result, func, args)
 
 
 @biocli.command('neighbors')
 @click.argument('dataset', required=True)
 @click.pass_context
-def neighbors(context, dataset):
+def neighbors(context, dataset, sort_result=True, listing=True):
     """
     Runs neighbors(pattern, d). The input variables 'pattern' and 'd' are read from the DATASET
     argument, where DATASET is the text file containing the input data.
     """
     challenge = context.obj['CHALLENGE']
-    click.clear()
 
-    data = NeighborsDataset(dataset, challenge)
+    data = dsr.NeighborsDataset(dataset, challenge)
 
     pattern = data.pattern
     d = data.d
+    correct_result = get_correct_result(data, challenge)
 
-    if challenge:
-        result = bioinfo1.neighbors(pattern, d)
-        nl = '\n'
-        click.echo(f"The result of the Coding Challenge is:")
-        click.echo(click.style(f"{nl}{nl.join(sorted(result))}", fg="yellow", bold=True))
-    else:
-        correct_result = data.result
-        result = bioinfo1.neighbors(pattern, d)
-        correct_result = ' '.join(sorted(correct_result))
-        result = ' '.join(sorted(result))
-        text_color = result_color(result, correct_result)
-        click.echo(click.style(f"The result of this function is:"))
-        click.echo(click.style(f"{result}", fg=text_color, bold=True))
+    args = pattern, d
+    func = bioinfo1.neighbors
+    cli_output(challenge, correct_result, sort_result, listing, func, args)
 
 
 @biocli.command('frequent-words-mismatches')
 @click.argument('dataset', required=True)
 @click.pass_context
-def frequent_words_mismatches(context, dataset):
+def frequent_words_mismatches(context, dataset, sort_result=False, listing=False):
     """
     Runs frequent_words_with_mismatches(pattern, k, d). The input variables 'pattern', 'k' and 'd'
     are read from the DATASET argument, where DATASET is the text file containing the input data.
     """
     challenge = context.obj['CHALLENGE']
-    click.clear()
 
-    data = FrequentWordsMismatchesDataset(dataset, challenge)
+    data = dsr.FrequentWordsMismatchesDataset(dataset, challenge)
 
     text = data.text
     k = data.k
     d = data.d
+    correct_result = get_correct_result(data, challenge)
 
-    if challenge:
-        result = bioinfo1.frequent_words_with_mismatches_sorting(text, k, d)
-        click.echo(f"The result of the Coding Challenge is:")
-        click.echo(click.style(f"{' '.join(map(str, result))}", fg="yellow", bold=True))
-    else:
-        correct_result = data.result
-        result = bioinfo1.frequent_words_with_mismatches(text, k, d)
-        correct_result = ' '.join(sorted(correct_result))
-        result = ' '.join(sorted(result))
-        text_color = result_color(result, correct_result)
-        click.echo(click.style(f"The result of this function is:"))
-        click.echo(click.style(f"{result}", fg=text_color, bold=True))
+    args = text, k, d
+    func = bioinfo1.frequent_words_with_mismatches_sorting
+    cli_output(challenge, correct_result, sort_result, listing, func, args)
 
 
 @biocli.command('frequent-words-mismatches-and-reverse-complement')
 @click.argument('dataset', required=True)
 @click.pass_context
-def frequent_words_mismatches_and_reverse_complement(context, dataset):
+def frequent_words_mismatches_and_reverse_complement(context, dataset, sort_result=False, listing=False):
     """
     Runs frequent_words_with_mismatches_and_reverse_complement(pattern, k, d). The input variables
     'pattern', 'k' and 'd' are read from the DATASET argument, where DATASET is the text file
     containing the input data.
     """
     challenge = context.obj['CHALLENGE']
-    click.clear()
 
-    data = FrequentWordsMismatchesDataset(dataset, challenge)
+    data = dsr.FrequentWordsMismatchesDataset(dataset, challenge)
 
     text = data.text
     k = data.k
     d = data.d
 
-    if challenge:
-        result = bioinfo1.frequent_words_with_mismatches_and_reverse_complement(text, k, d)
-        click.echo(f"The result of the Coding Challenge is:")
-        click.echo(click.style(f"{' '.join(map(str, result))}", fg="yellow", bold=True))
-    else:
-        correct_result = data.result
-        result = bioinfo1.frequent_words_with_mismatches_and_reverse_complement(text, k, d)
-        correct_result = ' '.join(sorted(correct_result))
-        result = ' '.join(sorted(result))
-        text_color = result_color(result, correct_result)
-        click.echo(click.style(f"The result of this function is:"))
-        click.echo(click.style(f"{result}", fg=text_color, bold=True))
+    correct_result = get_correct_result(data, challenge)
+
+    args = text, k, d
+    func = bioinfo1.frequent_words_with_mismatches_and_reverse_complement
+    cli_output(challenge, correct_result, sort_result, listing, func, args)
+
+
+@biocli.command('skew-plot')
+@click.option('-m', '--minimum-skew', required=False, is_flag=True, help='adds minimum skew indicators to plot')
+@click.argument('genome', required=True)
+def skew_plot(minimum_skew, genome):
+    """
+    Generates a skew plot of the provided genome
+    """
+    skew_genome = dsr.Genome(genome).genome
+    SkewPlot(skew_genome).generate_plot()
+
+    if minimum_skew:
+        click.echo("test skew option")
 
 
 if __name__ == '__main__':
