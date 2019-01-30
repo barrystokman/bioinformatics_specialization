@@ -301,7 +301,7 @@ class NeighborsDataset(ReadDataset):
         result = []
         for neighbor in self.lines[4:len(self.lines)]:
             result.append(neighbor.rstrip())
-        return sorted(result)
+        return '\n'.join(sorted(result))
 
 
 class FrequentWordsMismatchesDataset(ReadDataset):
@@ -329,14 +329,17 @@ class FrequentWordsMismatchesDataset(ReadDataset):
 
     @property
     def result(self):
-        return sorted([result.rstrip() for result in self.lines[4].split(' ')])
+        return ' '.join(sorted([result.rstrip() for result in self.lines[4].split(' ')]))
 
 
 class Genome(ReadDataset):
 
     @property
     def genome(self):
-        return self.lines[0].rstrip()
+        if len(self.lines) == 1:
+            return self.lines[0].rstrip()
+        else:
+            return ''.join([line.rstrip() for line in self.lines[1:]])
 
 
 def main():
