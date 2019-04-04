@@ -1,5 +1,4 @@
 import click
-# import matplotlib.pyplot as plt
 
 from bioinformatics_1 import functions as bioinfo1
 from apps.cli import result_color, cli_output, get_correct_result
