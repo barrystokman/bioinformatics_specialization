@@ -30,11 +30,15 @@ class SkewPlot:
 
     def generate_plot(self):
         plt.plot(self.position_axis, self.skew_axis, 'b')
-        plt.plot(self.minimum_skew_positions, self.minimum_skew_values, 'ro')
-        for x, y in zip(self.minimum_skew_positions, self.minimum_skew_values):
-            plt.text(x, y, f"{x}, {y}")
         plt.xlim([0, len(self.position_axis)])
         plt.title('Skew Diagram')
         plt.xlabel('position')
         plt.ylabel('skew')
+
+    def show_minimum_skew(self):
+        plt.plot(self.minimum_skew_positions, self.minimum_skew_values, 'ro')
+        for x, y in zip(self.minimum_skew_positions, self.minimum_skew_values):
+            plt.text(x, y, f"{x}, {y}")
+
+    def show_plot(self):
         plt.show()

@@ -352,9 +352,9 @@ def skew_plot(minimum_skew, genome):
     """
     skew_genome = dsr.Genome(genome).genome
     SkewPlot(skew_genome).generate_plot()
-
     if minimum_skew:
-        click.echo("test skew option")
+        SkewPlot(skew_genome).show_minimum_skew()
+    SkewPlot(skew_genome).show_plot()
 
 
 if __name__ == '__main__':
