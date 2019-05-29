@@ -350,11 +350,12 @@ def skew_plot(minimum_skew, genome):
     """
     Generates a skew plot of the provided genome
     """
-    skew_genome = dsr.Genome(genome).genome
-    SkewPlot(skew_genome).generate_plot()
+    skew_genome = dsr.Genome(genome)
+    skewplot_obj = SkewPlot(skew_genome)
+    skewplot_obj.generate_plot()
     if minimum_skew:
-        SkewPlot(skew_genome).show_minimum_skew()
-    SkewPlot(skew_genome).show_plot()
+        skewplot_obj.show_minimum_skew()
+    skewplot_obj.show_plot()
 
 
 if __name__ == '__main__':
