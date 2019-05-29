@@ -10,6 +10,7 @@ from apps.constants import DATASET_PATH
 class ReadDataset:
 
     def __init__(self, file_name, challenge=False):
+        self.file_name = file_name
         self.challenge = challenge
         with open(DATASET_PATH + file_name) as f:
             self.lines = [line for line in f]
