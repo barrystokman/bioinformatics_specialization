@@ -32,6 +32,11 @@ class SkewPlot:
     def minimum_skew_values(self):
         return [self.skew[position] for position in self.minimum_skew_positions]
 
+    @staticmethod
+    def skew_text(positions, values):
+        for pos, val in enumerate(zip(positions, values)):
+            pass
+
     def generate_plot(self):
         position_axis = self.position_axis
         skew_axis = self.skew_axis
@@ -45,8 +50,19 @@ class SkewPlot:
         minimum_skew_positions = self.minimum_skew_positions
         minimum_skew_values = self.minimum_skew_values
         plt.plot(minimum_skew_positions, minimum_skew_values, 'ro')
+
+        x_fraction=0.6
+        y_fraction = 0.8
+        y_offset = -0.05
+
         for x, y in zip(minimum_skew_positions, minimum_skew_values):
-            plt.text(x, y, f"{x}, {y}")
+            plt.annotate(
+                f"({x}, {y})",
+                xy=(x, y), xycoords='data',
+                xytext=(x_fraction, y_fraction), textcoords='axes fraction',
+                arrowprops=dict(arrowstyle='->', facecolor='black')
+            )
+            y_fraction += y_offset
 
     def show_plot(self):
         plt.show()
