@@ -3,6 +3,7 @@ import click
 from bioinformatics_1 import functions as bioinfo1
 from apps.cli import result_color, cli_output, get_correct_result
 from apps.plot import SkewPlot
+from apps.ori_finder import OriFinder
 import apps.dataset_reader as dsr
 
 
@@ -356,6 +357,33 @@ def skew_plot(minimum_skew, genome):
     if minimum_skew:
         skewplot_obj.show_minimum_skew()
     skewplot_obj.show_plot()
+
+
+@biocli.command('find-ori')
+@click.argument('genome', required=True)
+def find_ori(genome):
+    """
+    Finds the origin of replication in a given microbial genome
+    1. Read genome
+    2. Get ori candidate based on minimum skew
+    3. Plot skew diagram with minimum skew indicators and ori candidate
+    4. Plot the following: most frequent 9-mers with 1 or 2 mismatches in 500 length windows in a
+    region -2000 to +2000 positions around the ori candidate position
+    5. 
+    """
+    # 1
+    ori_genome = dsr.Genome(genome)
+    ori_obj = OriFinder(ori_genome)
+    # 2
+    plot_obj = SkewPlot(ori_genome)
+    plot_obj.generate_plot()
+    plot_obj.show_minimum_skew()
+    plot_obj.show_plot()
+    print(f"ori candidate: {ori_obj.ori_candidate}")
+    import ipdb; ipdb.set_trace()
+    ori_frequent_kmers = ori_obj.find_frequent_kmers()
+    print(f"{ori_frequent_kmers}")
+
 
 
 if __name__ == '__main__':

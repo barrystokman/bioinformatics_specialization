@@ -64,5 +64,8 @@ class SkewPlot:
             )
             y_fraction += y_offset
 
+    def show_ori_candidate(self):
+        pass
+
     def show_plot(self):
         plt.show()
