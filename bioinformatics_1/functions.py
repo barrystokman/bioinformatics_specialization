@@ -40,6 +40,10 @@ frequent_words_with_mismatches_sorting(text, k, d)
 
 DEPRECATED:
 count_d(pattern, text, d)
+
+Extra:
+
+pattern_and_reverse_complement_count(pattern, text):
 """
 
 
@@ -550,6 +554,17 @@ def frequent_words_with_mismatches_sorting(text: str, k: int, d: int) -> list:
             frequent_patterns.append(number_to_pattern(sorted_index[i], k))
 
     return sorted(list(set(frequent_patterns)))
+
+
+def approx_pattern_and_reverse_complement_count(pattern, text, d):
+    """
+    Finds the frequency of a pattern and its reverse complement in a text, and all patterns within
+    a hamming distance d
+    """
+    pattern_frequency = approx_pattern_count(pattern, text, d)
+    rc_pattern_frequency = approx_pattern_count(reverse_complement(pattern), text, d)
+
+    return pattern_frequency + rc_pattern_frequency
 
 
 def main():
