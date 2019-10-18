@@ -3,6 +3,7 @@ A collection of helper functions to support the CLI module(s)
 """
 import click
 import pyperclip
+import math
 
 import apps.decorators
 
@@ -49,3 +50,13 @@ def no_challenge_output(func, result, correct_result):
     text_color = result_color(result, correct_result)
     click.echo(click.style(f"The result of function {func.__name__!r} is:", fg="white", bold=True))
     click.echo(click.style(f"{result}", fg=text_color, bold=True))
+
+def determine_padding(motifs: dict) -> int:
+    padding = -math.inf
+    for row in motifs.values():
+        for frequency in row:
+            length = len(str(frequency))
+            if length > padding:
+                padding = length
+
+    return padding

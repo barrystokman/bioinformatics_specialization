@@ -1,3 +1,5 @@
+import math
+
 """
 Collection of funtions developed for the course Bioinformatics I: Finding Hidden Messages in DNA.
 Note that these functions return python objects. The code graded problems (code_graded_problems.py)
@@ -38,12 +40,12 @@ immediate_neighbors(pattern)
 frequent_words_with_mismatches_and_reverse_complement(text, k, d)
 frequent_words_with_mismatches_sorting(text, k, d)
 
+Week 3:
+motif_enumeration(dna, k, d)
+median_pattern(dna, k)
+
 DEPRECATED:
 count_d(pattern, text, d)
-
-Extra:
-
-pattern_and_reverse_complement_count(pattern, text):
 """
 
 
@@ -556,7 +558,7 @@ def frequent_words_with_mismatches_sorting(text: str, k: int, d: int) -> list:
     return sorted(list(set(frequent_patterns)))
 
 
-def approx_pattern_and_reverse_complement_count(pattern, text, d):
+def approx_pattern_and_reverse_complement_count(pattern: str, text: str, d: int) -> int:
     """
     Finds the frequency of a pattern and its reverse complement in a text, and all patterns within
     a hamming distance d
@@ -567,9 +569,228 @@ def approx_pattern_and_reverse_complement_count(pattern, text, d):
     return pattern_frequency + rc_pattern_frequency
 
 
-def main():
-    pass
+def motif_enumeration(dna: list, k: int, d: int) -> set:
+    """
+    Brute force or exhaustive search algorithm to find an implanted motif.
+
+    Given a collection of strings Dna and an integer d, a k-mer is a (k,d)-motif if it appears in
+    every string from Dna with at most d mismatches
+
+    Input: Integers k and d, followed by a collection of strings Dna.
+    Output: All (k, d)-motifs in Dna.
+    """
+    patterns = set()
+
+    first_string = dna[0]
+
+    for i in range(len(first_string) - k + 1):
+        pattern = first_string[i:i+k]
+        for neighbor in neighbors(pattern, d):
+            add_neighbor = []
+            for string in dna:
+                add_neighbor.append(any(_ in string for _ in neighbors(neighbor, d)))
+            if all(add_neighbor):
+                patterns.add(neighbor)
+
+    return list(patterns)
+
+
+def distance_between_pattern_and_strings(pattern: str, dna: list) -> int:
+    """
+    Input: A string pattern followed by a collection of strings dna.
+    Output: d(pattern, dna).
+    """
+    k = len(pattern)
+    distance = 0
+
+    for string in dna:
+        d = math.inf
+        for i in range(len(string) - k + 1):
+            pattern_in_string = string[i:i+k]
+            if hamming_distance(pattern, pattern_in_string) < d:
+                d = hamming_distance(pattern, pattern_in_string)
+        distance += d
+
+    return distance
+
+
+def median_string(dna: list, k: int) -> str:
+    """
+    Input: A collection of strings Dna and an integer k.
+    Output: A k-mer Pattern that minimizes d(Pattern, Dna) among all possible choices of k-mers.
+    """
+    distance = math.inf
+
+    for i in range(NUMBER_OF_SYMBOLS ** k - 1):
+        pattern = number_to_pattern(i, k)
+        current_distance = distance_between_pattern_and_strings(pattern, dna)
+        if distance > current_distance:
+            distance = current_distance
+            median = pattern
+
+    return median
+
+
+def motifs_score_by_columns(motifs: list) -> int:
+    """
+    Given a motif matrix motifs, motifs_score(motifs) determines the sum of the number of unpopular
+    letters in each column of the matrix
+    """
+    count_matrix = motifs_count(motifs)
+    score = 0
+    columns = len(motifs[0])
+
+    for i in range(columns):
+        all_scores = [value[i] for value in count_matrix.values()]
+        score += sum(all_scores) - max(all_scores)
+
+    return score
+
+
+def motifs_score_by_rows(motifs: list) -> int:
+    """
+
+    """
+    concensus = motifs_concensus(motifs)
+    score = 0
+
+    for string in motifs:
+        score += hamming_distance(concensus, string)
+
+    return score
+
+
+def motifs_count(motifs: list) -> dict:
+    """
+
+    """
+    count_matrix = {nucleotide: [] for nucleotide in NUCLEOTIDES}
+    columns = len(motifs[0])
+
+    for i in range(columns):
+        column = [string[i] for string in motifs]
+        for nucleotide in NUCLEOTIDES:
+            count_matrix[nucleotide].append(column.count(nucleotide))
+
+    return count_matrix
+
+
+def motifs_profile(motifs: list) -> dict:
+    """
+
+    """
+    count_matrix = motifs_count(motifs)
+    sum_scores = len(motifs)
+
+    profile = {k: [score / sum_scores for score in v] for k, v in count_matrix.items()}
+
+    return profile
+
+
+def motifs_concensus(motifs: list) -> str:
+    """
+
+    """
+    columns = len(motifs[0])
+    nucleotides = list(profile.keys())
+    concensus = str()
+
+    for i in range(columns):
+        profile_values = [value[i] for value in profile.values()]
+        max_profile_value = max(profile_values)
+        max_profile_index = profile_values.index(max_profile_value)
+        concensus_nucleotide = nucleotides[max_profile_index]
+        concensus += concensus_nucleotide
+
+    return concensus
+
+
+def motif_entropy(motifs: list) -> float:
+    """
+
+    """
+    profile = motifs_profile(motifs)
+    columns = len(motifs[0])
+    entropy = 0
+
+    for i in range(columns):
+        profile_values = [value[i] for value in profile.values()]
+        entropy += sum([value * math.log2(value) if value != 0 else 0 for value in profile_values])
+
+    return entropy
+
+
+def profile_most_probable_kmer(text: str, k: int, profile: dict) -> str:
+    """
+    Profile-most Probable k-mer Problem: Find a Profile-most probable k-mer in a string.
+
+    Input: A string Text, an integer k, and a 4 × k matrix Profile.
+    Output: A Profile-most probable k-mer in Text.
+    """
+    text_length = len(text)
+    highest_probability = -math.inf
+    most_probable_kmer = str()
+
+    for i in range(text_length - k + 1):
+        pattern = text[i:i+k]
+        p = 1
+        for j in range(len(pattern)):
+            p *= profile[pattern[j]][j]
+        if p > highest_probability:
+            highest_probability = p
+            most_probable_kmer = pattern
+
+    return most_probable_kmer
+
+
+def greedy_motif_search(dna: list, k: int, t: int) -> list:
+    """
+    Input: Integers k and t, followed by a collection of strings dna.
+    Output: A collection of strings best_motifs resulting from applying greedy_motif_search(dna, k,
+    t). If at any step you find more than one profile-most probable k-mer in a given string, use
+    the one occurring first.
+    """
+    first_dna_string = dna[0]
+    best_motifs = [string[:k] for string in dna]
+
+    for i in range(len(first_dna_string) - k + 1):
+        motifs = [first_dna_string[i:i+k]]
+        for j in range(1, t):
+            profile = motifs_profile(motifs)
+            for key, value in profile.items():
+                profile[key] = [p + 1 for p in value]
+            best_motif = profile_most_probable_kmer(dna[j], k, profile)
+            motifs.append(best_motif)
+        score_motifs = motifs_score_by_rows(motifs)
+        score_best_motifs = motifs_score_by_rows(best_motifs)
+        if score_motifs < score_best_motifs:
+            best_motifs = motifs
+
+    return best_motifs
+
+
+# def motifs(pattern: str, dna: list) -> list:
+#     """
+#     Motifs(Pattern, Dna) is a collection of k-mers that minimizes d(Pattern, Motifs) for a given
+#     Pattern and all possible sets of k-mers Motifs in Dna.
+#     """
+#     k = len(pattern)
+#     string_length = len(dna[0])
+#     result = []
+#     import ipdb; ipdb.set_trace()
+
+#     for string in dna:
+#         minimized_distance = math.inf
+#         for i in range(string_length - k + 1):
+#             pattern_in_string = string[i:i+k]
+#             current_distance = hamming_distance(pattern_in_string, pattern)
+#             if current_distance <= minimized_distance:
+#                 minimized_distance = current_distance
+#                 minimized_distance_pattern = pattern_in_string
+#         result.append(minimized_distance_pattern)
+
+#     return result
 
 
 if __name__ == '__main__':
-    main()
+    pass

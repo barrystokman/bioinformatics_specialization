@@ -4,7 +4,7 @@ variables.
 Main class: ReadDataset: instantiating this class reads the file specified on the CLI
 Subclasses: xxxDataset: returns variables <var1>, <var2>, ..., <varn> for function <func>
 """
-from apps.constants import DATASET_PATH
+from apps.constants import DATASET_PATH, NUCLEOTIDES
 
 
 class ReadDataset:
@@ -341,6 +341,177 @@ class Genome(ReadDataset):
             return self.lines[0].rstrip()
         else:
             return ''.join([line.rstrip() for line in self.lines[1:]])
+
+
+class MotifEnumerationDataset(ReadDataset):
+
+    def __output_line_index(self):
+        return self.lines.index('Output\n')
+
+    @property
+    def dna(self):
+
+        dna = []
+
+        if self.challenge:
+            for line in self.lines[1:]:
+                dna.append(line.rstrip())
+        else:
+            output_index = self.__output_line_index()
+            for line in self.lines[2:output_index]:
+                dna.append(line.rstrip())
+
+        return dna
+
+    @property
+    def k(self):
+        if self.challenge:
+            return int(self.lines[0].split(' ')[0])
+        else:
+            return int(self.lines[1].split(' ')[0])
+
+    @property
+    def d(self):
+        if self.challenge:
+            return int(self.lines[0].split(' ')[1].rstrip())
+        else:
+            return int(self.lines[1].split(' ')[1].rstrip())
+
+    @property
+    def result(self):
+        output_index = self.__output_line_index()
+        result = []
+
+        for line in self.lines[output_index + 1:]:
+            result.append(line.rstrip())
+
+        return ' '.join(result)
+
+
+class DistanceBetweenPatternAndString(ReadDataset):
+
+    def __output_line_index(self):
+        return self.lines.index('Output\n')
+
+    @property
+    def pattern(self):
+        if self.challenge:
+            return self.lines[0].rstrip()
+        else:
+            return self.lines[1].rstrip()
+
+    @property
+    def dna(self):
+
+        if self.challenge:
+            return self.lines[1].rstrip().split(' ')
+        else:
+            return self.lines[2].rstrip().split(' ')
+
+    @property
+    def result(self):
+        output_index = self.__output_line_index()
+
+        return int(self.lines[output_index + 1])
+
+
+class MedianString(ReadDataset):
+
+    def __output_line_index(self):
+        return self.lines.index('Output\n')
+
+    @property
+    def dna(self):
+
+        dna = []
+
+        if self.challenge:
+            for line in self.lines[1:]:
+                dna.append(line.rstrip())
+        else:
+            output_index = self.__output_line_index()
+            for line in self.lines[2:output_index]:
+                dna.append(line.rstrip())
+
+        return dna
+
+    @property
+    def k(self):
+        if self.challenge:
+            return int(self.lines[0].rstrip())
+        else:
+            return int(self.lines[1].rstrip())
+
+    @property
+    def result(self):
+        output_index = self.__output_line_index()
+
+        return self.lines[output_index + 1].rstrip()
+
+
+class ProfileMostProbableKmer(ReadDataset):
+
+    @property
+    def text(self):
+        if self.challenge:
+            return self.lines[0].rstrip()
+        else:
+            return self.lines[1].rstrip()
+
+    @property
+    def k(self):
+        if self.challenge:
+            return int(self.lines[1].rstrip())
+        else:
+            return int(self.lines[2].rstrip())
+
+    @property
+    def profile(self):
+        if self.challenge:
+            probabilities = [[float(p) for p in row.split(' ')] for row in self.lines[2:6]]
+        else:
+            probabilities = [[float(p) for p in row.split(' ')] for row in self.lines[3:7]]
+
+        return dict(zip(NUCLEOTIDES, probabilities))
+
+    @property
+    def result(self):
+
+        return self.lines[8].rstrip()
+
+
+class GreedyMotifSearch(ReadDataset):
+
+    def __output_line_index(self):
+        return self.lines.index('Output\n')
+
+    @property
+    def dna(self):
+        if self.challenge:
+            return [value.rstrip() for value in self.lines[1:]]
+        else:
+            output_line_index = self.__output_line_index()
+            return [value.rstrip() for value in self.lines[2:output_line_index]]
+
+    @property
+    def k(self):
+        if self.challenge:
+            return int(self.lines[0].rstrip().split(' ')[0])
+        else:
+            return int(self.lines[1].rstrip().split(' ')[0])
+
+    @property
+    def t(self):
+        if self.challenge:
+            return int(self.lines[0].rstrip().split(' ')[1])
+        else:
+            return int(self.lines[1].rstrip().split(' ')[1])
+
+    @property
+    def result(self):
+        output_line_index = self.__output_line_index()
+
+        return ' '.join([result.rstrip() for result in self.lines[output_line_index+1:]])
 
 
 def main():
