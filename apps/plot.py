@@ -64,5 +64,36 @@ class SkewPlot:
             )
             y_fraction += y_offset
 
+    def show_ori_candidate(self):
+        pass
+
+    def show_plot(self):
+        plt.show()
+
+
+class CountBarPlot:
+
+    def __init__(self, genome, count):
+        self.genome = genome.genome
+        self.organism_name = genome.file_name.split('.')[0].replace('_', ' ')
+        self.count = count
+
+    @property
+    def position_axis(self):
+        return [pos for pos in range(len(self.genome) - 500)]
+
+    @property
+    def count_axis(self):
+        return self.count
+
+    def generate_plot(self):
+        position_axis = self.position_axis
+        count_axis = self.count_axis
+        plt.plot(position_axis, count_axis, 'b')
+        plt.xlim([0, len(position_axis)])
+        plt.title(f'Count Diagram for {self.organism_name}')
+        plt.xlabel('position')
+        plt.ylabel('count')
+
     def show_plot(self):
         plt.show()
