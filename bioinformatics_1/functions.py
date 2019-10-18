@@ -691,6 +691,7 @@ def motifs_concensus(motifs: list) -> str:
     """
 
     """
+    profile = motifs_profile(motifs)
     columns = len(motifs[0])
     nucleotides = list(profile.keys())
     concensus = str()
