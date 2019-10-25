@@ -1,4 +1,5 @@
 import math
+import random
 
 """
 Collection of funtions developed for the course Bioinformatics I: Finding Hidden Messages in DNA.
@@ -41,8 +42,20 @@ frequent_words_with_mismatches_and_reverse_complement(text, k, d)
 frequent_words_with_mismatches_sorting(text, k, d)
 
 Week 3:
+
 motif_enumeration(dna, k, d)
-median_pattern(dna, k)
+distance_between_pattern_and_strings(pattern, dna)
+median_string(dna, k)
+motifs_score_by_columns(motifs)
+motifs_score_by_rows(motifs)
+motifs_count(motifs)
+motifs_profile(motifs)
+motifs_profile_laplace(motifs)
+motifs_concensus(motifs)
+motif_entropy(motifs)
+profile_most_probable_kmer(text, k, profile)
+greedy_motif_search(dna, t)
+randomized_motif_search, t)
 
 DEPRECATED:
 count_d(pattern, text, d)
@@ -687,6 +700,20 @@ def motifs_profile(motifs: list) -> dict:
     return profile
 
 
+def motifs_profile_laplace(motifs: list) -> dict:
+    """
+
+    """
+    count_matrix = motifs_count(motifs)
+    sum_scores = len(motifs)
+
+    profile = {k: [score / sum_scores for score in v] for k, v in count_matrix.items()}
+    for key, value in profile.items():
+        profile[key] = [p + 1 for p in value]
+
+    return profile
+
+
 def motifs_concensus(motifs: list) -> str:
     """
 
@@ -757,9 +784,12 @@ def greedy_motif_search(dna: list, k: int, t: int) -> list:
     for i in range(len(first_dna_string) - k + 1):
         motifs = [first_dna_string[i:i+k]]
         for j in range(1, t):
+            # profile = motifs_profile_laplace(motifs)
+            # TODO: replace block below with motifs_profile_laplace
             profile = motifs_profile(motifs)
             for key, value in profile.items():
                 profile[key] = [p + 1 for p in value]
+            #
             best_motif = profile_most_probable_kmer(dna[j], k, profile)
             motifs.append(best_motif)
         score_motifs = motifs_score_by_rows(motifs)
@@ -770,27 +800,34 @@ def greedy_motif_search(dna: list, k: int, t: int) -> list:
     return best_motifs
 
 
-# def motifs(pattern: str, dna: list) -> list:
-#     """
-#     Motifs(Pattern, Dna) is a collection of k-mers that minimizes d(Pattern, Motifs) for a given
-#     Pattern and all possible sets of k-mers Motifs in Dna.
-#     """
-#     k = len(pattern)
-#     string_length = len(dna[0])
-#     result = []
-#     import ipdb; ipdb.set_trace()
+def randomized_motif_search(dna: list, k: int , t: int) -> list:
+    """
+    """
+    motifs = []
+    for i, string in enumerate(dna):
+        random_index = random.randrange(len(string) - k)
+        motifs.append(string[random_index:random_index+k])
+        best_motifs = motifs.copy()
+    while True:
+        profile = motifs_profile_laplace(motifs)
+        motifs = [profile_most_probable_kmer(string, k, profile) for string in dna]
+        if motifs_score_by_rows(motifs) < motifs_score_by_rows(best_motifs):
+            best_motifs = motifs
+        else:
+            return  best_motifs
 
-#     for string in dna:
-#         minimized_distance = math.inf
-#         for i in range(string_length - k + 1):
-#             pattern_in_string = string[i:i+k]
-#             current_distance = hamming_distance(pattern_in_string, pattern)
-#             if current_distance <= minimized_distance:
-#                 minimized_distance = current_distance
-#                 minimized_distance_pattern = pattern_in_string
-#         result.append(minimized_distance_pattern)
 
-#     return result
+def loop_randomized_motif_search(dna: list, k: int, t: int, n: int=1000) -> list:
+    """
+
+    """
+    current_motifs = randomized_motif_search(dna, k, t)
+
+    for i in range(n):
+        best_motifs = randomized_motif_search(dna, k, t)
+        if motifs_score_by_rows(best_motifs) < motifs_score_by_rows(current_motifs):
+            current_motifs = best_motifs
+    return current_motifs
 
 
 if __name__ == '__main__':

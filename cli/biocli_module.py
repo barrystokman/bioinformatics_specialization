@@ -475,6 +475,62 @@ def greedy_motif_search(context, dataset, sort_result=False, listing=False):
     cli_output(challenge, correct_result, sort_result, listing, func, args)
 
 
+@biocli.command('randomized-motif-search')
+@click.argument('dataset', required=True)
+@click.pass_context
+def randomized_motif_search(context, dataset, sort_result=False, listing=True):
+    """
+    Loops over randomized_motif_search(dna, k, t) 1000 times. The input variables 'dna', 'k' and
+    't' are read from the DATASET argument, where DATASET is the text file containing the input
+    data.
+    """
+    challenge = context.obj['CHALLENGE']
+    data = dsr.RandomizedMotifSearch(dataset, challenge)
+    dna = data.dna
+    k = data.k
+    t = data.t
+
+    correct_result = get_correct_result(data, challenge)
+
+    args = dna, k, t
+    func = bioinfo1.loop_randomized_motif_search
+    cli_output(challenge, correct_result, sort_result, listing, func, args)
+
+
+@biocli.command('subtle-motif-problem')
+@click.argument('dataset', required=True)
+@click.option('-n', '--number-of-iterations', required=False, default=10000, type=int, help='')
+@click.pass_context
+def subtle_motif_problem(context, dataset, sort_result=False, listing=True):
+    """
+    Tries to solve the subtle motif problem as stated in Week 4, Chapter 1.1, step 9:
+    1) Run randomized_motif_search(dna, k, t) n (standard = 10 000) times by running loop_randomized_motif_search().
+    2) Determine motif score (by row)
+    3) Determine the concensus string
+    """
+    import ipdb;ipdb.set_trace() 
+    challenge = True
+    data = dsr.RandomizedMotifSearch(dataset, challenge)
+    dna = data.dna
+    k = data.k
+    t = data.t
+
+    args = dna, k, t, n
+    # motifs = bioinfo1.loop_randomized_motif_search(*args)
+    motifs = bioinfo1.loop_randomized_motif_search(dna, k, t, n)
+    click.echo(click.style(f"Result of running randomized motif search:", fg="blue", bold=True))
+    for motif in motifs:
+        click.echo(click.style(f"{motif}", fg="yellow", bold=True))
+
+    score = bioinfo1.motifs_score_by_rows(motifs)
+    click.echo(click.style(f"Motif Score:", fg="blue", bold=True))
+    click.echo(click.style(f"{score}", fg="yellow", bold=True))
+
+    concensus = bioinfo1.motifs_concensus(motifs)
+    click.echo(click.style(f"Concensus:", fg="blue", bold=True))
+    click.echo(click.style(f"{concensus}", fg="yellow", bold=True))
+
+
 @biocli.command('skew-plot')
 @click.option('-m', '--minimum-skew', required=False, is_flag=True, help='adds minimum skew indicators to plot')
 @click.argument('genome', required=True)
