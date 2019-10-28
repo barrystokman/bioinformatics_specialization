@@ -55,7 +55,8 @@ motifs_concensus(motifs)
 motif_entropy(motifs)
 profile_most_probable_kmer(text, k, profile)
 greedy_motif_search(dna, t)
-randomized_motif_search, t)
+randomized_motif_search(dna, k, t)
+gibbs_random(probability_distribution)
 
 DEPRECATED:
 count_d(pattern, text, d)
@@ -828,6 +829,20 @@ def loop_randomized_motif_search(dna: list, k: int, t: int, n: int=1000) -> list
         if motifs_score_by_rows(best_motifs) < motifs_score_by_rows(current_motifs):
             current_motifs = best_motifs
     return current_motifs
+
+
+def gibbs_random(probability_distribution: list) -> int:
+    """
+	Given a probability distribution (p1, …, pn), this random number generator, denoted
+	Random(p1, …, pn), models an n-sided biased die and returns integer i with probability pi. If
+	the pi sum to some C > 0 instead, then Random(p1, …, pn) is defined as Random(p1/C, …, pn/C),
+	where (p1/C, …, pn/C) is a probability distribution.
+    """
+    c = sum(probability_distribution)
+    normalized_distribution = [p/c for p in probability_distribution]
+
+
+
 
 
 if __name__ == '__main__':
