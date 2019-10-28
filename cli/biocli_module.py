@@ -501,24 +501,24 @@ def randomized_motif_search(context, dataset, sort_result=False, listing=True):
 @click.argument('dataset', required=True)
 @click.option('-n', '--number-of-iterations', required=False, default=10000, type=int, help='')
 @click.pass_context
-def subtle_motif_problem(context, dataset, sort_result=False, listing=True):
+def subtle_motif_problem(context, dataset, number_of_iterations, sort_result=False, listing=True):
     """
     Tries to solve the subtle motif problem as stated in Week 4, Chapter 1.1, step 9:
     1) Run randomized_motif_search(dna, k, t) n (standard = 10 000) times by running loop_randomized_motif_search().
     2) Determine motif score (by row)
     3) Determine the concensus string
     """
-    import ipdb;ipdb.set_trace() 
     challenge = True
     data = dsr.RandomizedMotifSearch(dataset, challenge)
     dna = data.dna
     k = data.k
     t = data.t
+    n = number_of_iterations
 
     args = dna, k, t, n
     # motifs = bioinfo1.loop_randomized_motif_search(*args)
     motifs = bioinfo1.loop_randomized_motif_search(dna, k, t, n)
-    click.echo(click.style(f"Result of running randomized motif search:", fg="blue", bold=True))
+    click.echo(click.style(f"Result of running randomized motif search {n} times:", fg="blue", bold=True))
     for motif in motifs:
         click.echo(click.style(f"{motif}", fg="yellow", bold=True))
 
