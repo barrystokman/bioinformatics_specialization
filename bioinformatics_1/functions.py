@@ -801,7 +801,7 @@ def greedy_motif_search(dna: list, k: int, t: int) -> list:
     return best_motifs
 
 
-def randomized_motif_search(dna: list, k: int , t: int) -> list:
+def randomized_motif_search(dna: list, k: int, t: int) -> list:
     """
     """
     motifs = []
@@ -815,7 +815,7 @@ def randomized_motif_search(dna: list, k: int , t: int) -> list:
         if motifs_score_by_rows(motifs) < motifs_score_by_rows(best_motifs):
             best_motifs = motifs
         else:
-            return  best_motifs
+            return best_motifs
 
 
 def loop_randomized_motif_search(dna: list, k: int, t: int, n: int=1000) -> list:
@@ -833,16 +833,25 @@ def loop_randomized_motif_search(dna: list, k: int, t: int, n: int=1000) -> list
 
 def gibbs_random(probability_distribution: list) -> int:
     """
-	Given a probability distribution (p1, …, pn), this random number generator, denoted
-	Random(p1, …, pn), models an n-sided biased die and returns integer i with probability pi. If
-	the pi sum to some C > 0 instead, then Random(p1, …, pn) is defined as Random(p1/C, …, pn/C),
-	where (p1/C, …, pn/C) is a probability distribution.
+    Given a probability distribution (p1, …, pn), this random number generator, denoted
+    Random(p1, …, pn), models an n-sided biased die and returns integer i with probability pi. If
+    the pi sum to some C > 0 instead, then Random(p1, …, pn) is defined as Random(p1/C, …, pn/C),
+    where (p1/C, …, pn/C) is a probability distribution.
     """
     c = sum(probability_distribution)
     normalized_distribution = [p/c for p in probability_distribution]
 
+    roll = random.random()
+
+    for i, pc in enumerate(normalized_distribution):
+        if roll < sum(normalized_distribution[:i+1]):
+            return i
 
 
+def gibbs_sampler(dna: list, k: int, t: int, n: int) -> list:
+    """
+
+    """
 
 
 if __name__ == '__main__':
