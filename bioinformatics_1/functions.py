@@ -55,6 +55,8 @@ motifs_concensus(motifs)
 motif_entropy(motifs)
 profile_most_probable_kmer(text, k, profile)
 greedy_motif_search(dna, t)
+
+Week 4:
 randomized_motif_search(dna, k, t)
 gibbs_random(probability_distribution)
 
@@ -808,7 +810,7 @@ def randomized_motif_search(dna: list, k: int, t: int) -> list:
     for i, string in enumerate(dna):
         random_index = random.randrange(len(string) - k)
         motifs.append(string[random_index:random_index+k])
-        best_motifs = motifs.copy()
+    best_motifs = motifs.copy()
     while True:
         profile = motifs_profile_laplace(motifs)
         motifs = [profile_most_probable_kmer(string, k, profile) for string in dna]
@@ -852,6 +854,27 @@ def gibbs_sampler(dna: list, k: int, t: int, n: int) -> list:
     """
 
     """
+
+    motifs = []
+    for i, string in enumerate(dna):
+        random_index = random.randrange(len(string) - k)
+        motifs.append(string[random_index:random_index+k])
+    best_motifs = motifs.copy()
+
+    for j in range(n):
+        i = random.randrange(t)
+        removed_sequence = motifs.pop(i)
+        profile = motifs_profile_laplace(motifs)
+        import ipdb; ipdb.set_trace()
+        # for each kmer in removed_sequence calculate Pr(kmer|profile) resulting in n-k+1
+        # probabilities: p1, p2, ..., pn-k+1
+        
+
+
+        gibbs_random_index = gibbs_random(profile)
+        
+        insert_motif = dna[i][gibbs_random_index:gibbs_random_index+k]
+
 
 
 if __name__ == '__main__':

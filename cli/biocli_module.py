@@ -515,9 +515,8 @@ def subtle_motif_problem(context, dataset, number_of_iterations, sort_result=Fal
     t = data.t
     n = number_of_iterations
 
-    args = dna, k, t, n
-    # motifs = bioinfo1.loop_randomized_motif_search(*args)
     motifs = bioinfo1.loop_randomized_motif_search(dna, k, t, n)
+
     click.echo(click.style(f"Result of running randomized motif search {n} times:", fg="blue", bold=True))
     for motif in motifs:
         click.echo(click.style(f"{motif}", fg="yellow", bold=True))
@@ -529,6 +528,29 @@ def subtle_motif_problem(context, dataset, number_of_iterations, sort_result=Fal
     concensus = bioinfo1.motifs_concensus(motifs)
     click.echo(click.style(f"Concensus:", fg="blue", bold=True))
     click.echo(click.style(f"{concensus}", fg="yellow", bold=True))
+
+
+@biocli.command('gibbs-sampler')
+@click.argument('dataset', required=True)
+@click.pass_context
+def gibbs_sampler(context, dataset, sort_result=False, listing=True):
+    """
+
+    """
+    import ipdb; ipdb.set_trace()
+    challenge = context.obj['CHALLENGE']
+
+    data = dsr.GibbsSampler(dataset, challenge)
+    dna = data.dna
+    k = data.k
+    t = data.t
+    n = data.n
+
+    correct_result = get_correct_result(data, challenge)
+
+    args = dna, k, t, n
+    func = bioinfo1.gibbs_sampler
+    cli_output(challenge, correct_result, sort_result, listing, func, args)
 
 
 @biocli.command('skew-plot')
@@ -626,7 +648,6 @@ def find_ori(genome):
         number_of_kmers = ori_obj.count_kmers_in_window(candidate, start=position, mismatch=mismatch)
         graph_count.append(number_of_kmers)
         print('{:.2%}'.format(position / (len(ori_genome.genome) - WINDOW_SIZE)))
-
 
     import ipdb; ipdb.set_trace()
     # plot  diagram
