@@ -514,6 +514,81 @@ class GreedyMotifSearch(ReadDataset):
         return ' '.join([result.rstrip() for result in self.lines[output_line_index+1:]])
 
 
+class RandomizedMotifSearch(ReadDataset):
+
+    def __output_line_index(self):
+        return self.lines.index('Output:\n')
+
+    @property
+    def k(self):
+        if self.challenge:
+            return int(self.lines[0].rstrip().split(' ')[0])
+        else:
+            return int(self.lines[1].rstrip().split(' ')[0])
+
+    @property
+    def dna(self):
+        if self.challenge:
+            return [value.rstrip() for value in self.lines[1:]]
+        else:
+            output_line_index = self.__output_line_index()
+            return [value.rstrip() for value in self.lines[2:output_line_index]]
+
+    @property
+    def t(self):
+        if self.challenge:
+            return int(self.lines[0].rstrip().split(' ')[1])
+        else:
+            return int(self.lines[1].rstrip().split(' ')[1])
+
+    @property
+    def result(self):
+        output_line_index = self.__output_line_index()
+
+        return ' '.join([result.rstrip() for result in self.lines[output_line_index+1:]])
+
+
+class GibbsSampler(ReadDataset):
+
+    def __output_line_index(self):
+        return self.lines.index('Output\n')
+
+    @property
+    def dna(self):
+        if self.challenge:
+            return [value.rstrip() for value in self.lines[1:]]
+        else:
+            output_line_index = self.__output_line_index()
+            return [value.rstrip() for value in self.lines[2:output_line_index]]
+
+    @property
+    def k(self):
+        if self.challenge:
+            return int(self.lines[0].rstrip().split(' ')[0])
+        else:
+            return int(self.lines[1].rstrip().split(' ')[0])
+
+    @property
+    def t(self):
+        if self.challenge:
+            return int(self.lines[0].rstrip().split(' ')[1])
+        else:
+            return int(self.lines[1].rstrip().split(' ')[1])
+
+    @property
+    def n(self):
+        if self.challenge:
+            return int(self.lines[0].rstrip().split(' ')[2])
+        else:
+            return int(self.lines[1].rstrip().split(' ')[2])
+
+    @property
+    def result(self):
+        output_line_index = self.__output_line_index()
+
+        return ' '.join([result.rstrip() for result in self.lines[output_line_index+1:]])
+
+
 def main():
     pass
 
