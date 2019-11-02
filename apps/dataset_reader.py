@@ -483,7 +483,7 @@ class ProfileMostProbableKmer(ReadDataset):
 class GreedyMotifSearch(ReadDataset):
 
     def __output_line_index(self):
-        return self.lines.index('output\n')
+        return self.lines.index('Output\n')
 
     @property
     def dna(self):

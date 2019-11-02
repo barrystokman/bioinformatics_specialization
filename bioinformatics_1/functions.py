@@ -708,11 +708,10 @@ def motifs_profile_laplace(motifs: list) -> dict:
 
     """
     count_matrix = motifs_count(motifs)
-    sum_scores = len(motifs)
+    pseudo_count_matrix = {key: [v + 1 for v in values] for key, values in count_matrix.items()}
+    sum_scores = sum([values[0] for values in list(pseudo_count_matrix.values())])
 
-    profile = {k: [score / sum_scores for score in v] for k, v in count_matrix.items()}
-    for key, value in profile.items():
-        profile[key] = [p + 1 for p in value]
+    profile = {k: [score / sum_scores for score in v] for k, v in pseudo_count_matrix.items()}
 
     return profile
 
@@ -787,12 +786,7 @@ def greedy_motif_search(dna: list, k: int, t: int) -> list:
     for i in range(len(first_dna_string) - k + 1):
         motifs = [first_dna_string[i:i+k]]
         for j in range(1, t):
-            # profile = motifs_profile_laplace(motifs)
-            # TODO: replace block below with motifs_profile_laplace
-            profile = motifs_profile(motifs)
-            for key, value in profile.items():
-                profile[key] = [p + 1 for p in value]
-            #
+            profile = motifs_profile_laplace(motifs)
             best_motif = profile_most_probable_kmer(dna[j], k, profile)
             motifs.append(best_motif)
         score_motifs = motifs_score_by_rows(motifs)
@@ -859,22 +853,48 @@ def gibbs_sampler(dna: list, k: int, t: int, n: int) -> list:
     for i, string in enumerate(dna):
         random_index = random.randrange(len(string) - k)
         motifs.append(string[random_index:random_index+k])
+
     best_motifs = motifs.copy()
 
     for j in range(n):
-        i = random.randrange(t)
-        removed_sequence = motifs.pop(i)
-        profile = motifs_profile_laplace(motifs)
-        import ipdb; ipdb.set_trace()
-        # for each kmer in removed_sequence calculate Pr(kmer|profile) resulting in n-k+1
-        # probabilities: p1, p2, ..., pn-k+1
-        
+        remove_index = random.randrange(t)
+        motifs_one_removed = motifs[:remove_index] + motifs[remove_index+1:]
+        profile = motifs_profile_laplace(motifs_one_removed)
+
+        probabilities = []
+        for kmer_index in range(len(dna[remove_index]) - k + 1):
+            probability_index = 1
+            kmer = dna[remove_index][kmer_index:kmer_index+k]
+            for char_index, char in enumerate(kmer):
+                probability_index *= profile[char][char_index]
+            probabilities.append(probability_index)
+
+        gibbs_random_index = gibbs_random(probabilities)
+
+        insert_motif = dna[remove_index][gibbs_random_index:gibbs_random_index+k]
+        motifs[remove_index] = insert_motif
+
+        if motifs_score_by_rows(motifs) < motifs_score_by_rows(best_motifs):
+            best_motifs = motifs.copy()
+
+    return best_motifs
 
 
-        gibbs_random_index = gibbs_random(profile)
-        
-        insert_motif = dna[i][gibbs_random_index:gibbs_random_index+k]
+def gibbs_sampler_loop(dna: list, k: int, t: int, n: int) -> list:
+    """
 
+    """
+    NUMBER_OF_STARTS = 20
+    best_motifs = []
+    best_motif_score = math.inf
+
+    for i in range(NUMBER_OF_STARTS):
+        current_motifs = gibbs_sampler(dna, k, t, n)
+        if motifs_score_by_rows(current_motifs) < best_motif_score:
+            best_motifs = current_motifs
+            best_motif_score = motifs_score_by_rows(best_motifs)
+
+    return best_motifs
 
 
 if __name__ == '__main__':

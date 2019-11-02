@@ -478,7 +478,7 @@ def greedy_motif_search(context, dataset, sort_result=False, listing=False):
 @biocli.command('randomized-motif-search')
 @click.argument('dataset', required=True)
 @click.pass_context
-def randomized_motif_search(context, dataset, sort_result=False, listing=True):
+def randomized_motif_search(context, dataset, sort_result=False, listing=False):
     """
     Loops over randomized_motif_search(dna, k, t) 1000 times. The input variables 'dna', 'k' and
     't' are read from the DATASET argument, where DATASET is the text file containing the input
@@ -533,12 +533,13 @@ def subtle_motif_problem(context, dataset, number_of_iterations, sort_result=Fal
 @biocli.command('gibbs-sampler')
 @click.argument('dataset', required=True)
 @click.pass_context
-def gibbs_sampler(context, dataset, sort_result=False, listing=True):
+def gibbs_sampler(context, dataset, sort_result=False, listing=False):
     """
 
     """
-    import ipdb; ipdb.set_trace()
     challenge = context.obj['CHALLENGE']
+    if challenge:
+        listing = True
 
     data = dsr.GibbsSampler(dataset, challenge)
     dna = data.dna
@@ -549,7 +550,8 @@ def gibbs_sampler(context, dataset, sort_result=False, listing=True):
     correct_result = get_correct_result(data, challenge)
 
     args = dna, k, t, n
-    func = bioinfo1.gibbs_sampler
+    # func = bioinfo1.gibbs_sampler
+    func = bioinfo1.gibbs_sampler_loop
     cli_output(challenge, correct_result, sort_result, listing, func, args)
 
 
